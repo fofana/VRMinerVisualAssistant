@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+    <AuxValue name="designerSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,1,-4,0,0,3,-90"/>
+  </AuxValues>
+
+  <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout"/>
+  <SubComponents>
+    <Container class="javax.swing.JPanel" name="jPanel1">
+      <Properties>
+        <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+          <Border info="org.netbeans.modules.form.compat2.border.TitledBorderInfo">
+            <TitledBorder title="User Objectives"/>
+          </Border>
+        </Property>
+      </Properties>
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="JLabel labelObjective = new JLabel(&quot;Objective Name&quot;);&#xa;JLabel labelImportance1 = new JLabel(&quot;Aucune Importance&quot;);&#xa;JLabel labelImportance2 = new JLabel(&quot;Faible Importance&quot;);&#xa;JLabel labelImportance3 = new JLabel(&quot;Moyenne Importance&quot;);&#xa;JLabel labelImportance4 = new JLabel(&quot;Forte Importance&quot;);&#xa;jPanel1.add(labelObjective);&#xa;jPanel1.add(labelImportance1);&#xa;jPanel1.add(labelImportance2);&#xa;jPanel1.add(labelImportance3);&#xa;jPanel1.add(labelImportance4);&#xa;for(int i=2; i&lt;=row; i++){&#xa; JLabel labelObjectiveName = new JLabel(&quot;Objective &quot;+i);&#xa; JRadioButton RadioImportance1 = new JRadioButton();&#xa; JRadioButton RadioImportance2 = new JRadioButton();&#xa; JRadioButton RadioImportance3 = new JRadioButton();&#xa; JRadioButton RadioImportance4 = new JRadioButton();&#xa; jPanel1.add(labelObjectiveName);&#xa; jPanel1.add(RadioImportance1);&#xa; jPanel1.add(RadioImportance2);&#xa; jPanel1.add(RadioImportance3);&#xa; jPanel1.add(RadioImportance4);&#xa;}"/>
+        <AuxValue name="JavaCodeGenerator_VariableModifier" type="java.lang.Integer" value="10"/>
+      </AuxValues>
+      <Constraints>
+        <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout" value="org.netbeans.modules.form.compat2.layouts.DesignBorderLayout$BorderConstraintsDescription">
+          <BorderConstraints direction="Center"/>
+        </Constraint>
+      </Constraints>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.DesignGridLayout">
+        <Property name="columns" type="int" value="5"/>
+        <Property name="horizontalGap" type="int" value="20"/>
+        <Property name="rows" type="int" value="5"/>
+        <Property name="verticalGap" type="int" value="50"/>
+      </Layout>
+    </Container>
+  </SubComponents>
+</Form>

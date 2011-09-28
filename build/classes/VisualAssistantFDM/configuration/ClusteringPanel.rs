@@ -1,0 +1,8 @@
+visualassistantfacv.ClusteringPanel
+visualassistantfacv.ClusteringPanel$1
+visualassistantfacv.ClusteringPanel$6
+visualassistantfacv.ClusteringPanel$7
+visualassistantfacv.ClusteringPanel$4
+visualassistantfacv.ClusteringPanel$5
+visualassistantfacv.ClusteringPanel$2
+visualassistantfacv.ClusteringPanel$3

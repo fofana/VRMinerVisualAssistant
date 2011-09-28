@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<Form version="1.5" maxVersion="1.7" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+  <Properties>
+    <Property name="defaultCloseOperation" type="int" value="3"/>
+    <Property name="title" type="java.lang.String" value="Visual Assistant"/>
+  </Properties>
+  <SyntheticProperties>
+    <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
+  </SyntheticProperties>
+  <AuxValues>
+    <AuxValue name="FormSettings_autoResourcing" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_autoSetComponentName" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_generateFQN" type="java.lang.Boolean" value="true"/>
+    <AuxValue name="FormSettings_generateMnemonicsCode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_i18nAutoMode" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_layoutCodeTarget" type="java.lang.Integer" value="1"/>
+    <AuxValue name="FormSettings_listenerGenerationStyle" type="java.lang.Integer" value="0"/>
+    <AuxValue name="FormSettings_variablesLocal" type="java.lang.Boolean" value="false"/>
+    <AuxValue name="FormSettings_variablesModifier" type="java.lang.Integer" value="2"/>
+  </AuxValues>
+
+  <Layout>
+    <DimensionLayout dim="0">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="scrollpane1" linkSize="3" min="-2" pref="362" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scrollpane2" linkSize="3" min="-2" pref="340" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scrollpane8" linkSize="3" min="-2" pref="362" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scrollpane7" linkSize="3" min="-2" pref="340" max="-2" attributes="0"/>
+                  </Group>
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="scrollpane3" linkSize="2" min="-2" pref="362" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="scrollpane4" linkSize="2" min="-2" pref="340" max="-2" attributes="0"/>
+                          </Group>
+                          <Group type="102" alignment="0" attributes="0">
+                              <Component id="scrollpane5" linkSize="3" min="-2" pref="362" max="-2" attributes="0"/>
+                              <EmptySpace max="-2" attributes="0"/>
+                              <Component id="scrollpane6" linkSize="3" min="-2" pref="340" max="-2" attributes="0"/>
+                          </Group>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="scrollpane9" pref="731" max="32767" attributes="0"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+    <DimensionLayout dim="1">
+      <Group type="103" groupAlignment="0" attributes="0">
+          <Group type="102" alignment="0" attributes="0">
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="scrollpane2" linkSize="4" alignment="0" max="32767" attributes="1"/>
+                      <Component id="scrollpane1" linkSize="4" alignment="0" pref="250" max="32767" attributes="1"/>
+                  </Group>
+                  <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                      <Component id="scrollpane7" linkSize="4" alignment="0" max="32767" attributes="1"/>
+                      <Component id="scrollpane8" linkSize="4" alignment="0" min="-2" pref="250" max="-2" attributes="1"/>
+                  </Group>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="scrollpane4" linkSize="4" alignment="0" max="32767" attributes="1"/>
+                          <Component id="scrollpane3" linkSize="4" alignment="0" pref="250" max="32767" attributes="1"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="1" max="-2" attributes="0">
+                          <Component id="scrollpane6" linkSize="4" alignment="0" max="32767" attributes="1"/>
+                          <Component id="scrollpane5" linkSize="4" alignment="0" pref="250" max="32767" attributes="1"/>
+                      </Group>
+                  </Group>
+                  <Component id="scrollpane9" pref="507" max="32767" attributes="0"/>
+              </Group>
+              <EmptySpace max="-2" attributes="0"/>
+          </Group>
+      </Group>
+    </DimensionLayout>
+  </Layout>
+  <SubComponents>
+    <Container class="javax.swing.JScrollPane" name="scrollpane1">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+1);&#xa;visu3D.createScene();&#xa;scrollpane1.setViewportView(visu3D.getCustomCanvas3D());&#xa;visu3D.addPointOfViewListener(visu3D.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(1);//afficher le profil i : qui est pass&#xe9; en param&#xe8;tre&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane2">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D1 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D1.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+2);&#xa;visu3D1.createScene();&#xa;scrollpane2.setViewportView(visu3D1.getCustomCanvas3D());&#xa;visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(2);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane3">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D3 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D3.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+5);&#xa;visu3D3.createScene();&#xa;scrollpane3.setViewportView(visu3D3.getCustomCanvas3D());&#xa;visu3D3.addPointOfViewListener(visu3D3.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(3);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane4">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D4 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D4.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+3);&#xa;visu3D4.createScene();&#xa;scrollpane4.setViewportView(visu3D4.getCustomCanvas3D());&#xa;visu3D4.addPointOfViewListener(visu3D4.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(3);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane5">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D5 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D5.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+1);&#xa;visu3D5.createScene();&#xa;scrollpane5.setViewportView(visu3D5.getCustomCanvas3D());&#xa;visu3D5.addPointOfViewListener(visu3D5.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(5);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane6">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D6 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D6.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+1);&#xa;visu3D6.createScene();&#xa;scrollpane6.setViewportView(visu3D6.getCustomCanvas3D());&#xa;visu3D6.addPointOfViewListener(visu3D6.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(6);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane7">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D7 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D7.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+4);&#xa;visu3D7.createScene();&#xa;scrollpane7.setViewportView(visu3D7.getCustomCanvas3D());&#xa;visu3D7.addPointOfViewListener(visu3D7.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(7);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane8">
+      <AuxValues>
+        <AuxValue name="JavaCodeGenerator_AddingCodePost" type="java.lang.String" value="Visualisation_Nuage_3D visu3D8 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;visu3D8.ConfigurationNuage3D(&quot;C:\\Users\\Abdelheq\\Desktop\\IRIS.xml&quot;, &quot;profil&quot;+3);&#xa;visu3D8.createScene();&#xa;scrollpane8.setViewportView(visu3D8.getCustomCanvas3D());&#xa;visu3D8.addPointOfViewListener(visu3D8.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {&#xa;&#xa;@Override&#xa;public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){&#xa;&#xa;updatePreview(8);&#xa;&#xa;}&#xa;});"/>
+      </AuxValues>
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+    <Container class="javax.swing.JScrollPane" name="scrollpane9">
+
+      <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+    </Container>
+  </SubComponents>
+</Form>
