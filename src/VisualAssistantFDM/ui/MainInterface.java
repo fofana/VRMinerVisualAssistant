@@ -5,6 +5,7 @@ package VisualAssistantFDM.ui;
 
 
 import java.awt.Color;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -125,6 +126,7 @@ public class MainInterface extends javax.swing.JFrame {
     private List<Double> objectivesWeight;
     private UserObjectivesDialog dialog;
     private LoadingBox loading;
+    private Component DB_VisualizationToolBar;
     
     /**
      * Constructeur creates new form VRMinerVisualAssistant
@@ -351,23 +353,15 @@ public class MainInterface extends javax.swing.JFrame {
         UpdateProfil = new javax.swing.JButton();
         GenerateNewProfil = new javax.swing.JButton();
         DB_Visualisations_ScrollPane = new javax.swing.JScrollPane(DB_VisualizationToolBar);
-        DB_VisualizationToolBar = new javax.swing.JToolBar();
+        DB_VisualizationPanel = new javax.swing.JPanel();
         jScrollPaneVisu3D1 = new javax.swing.JScrollPane();
-        jSeparator2 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D2 = new javax.swing.JScrollPane();
-        jSeparator11 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D3 = new javax.swing.JScrollPane();
-        jSeparator3 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D4 = new javax.swing.JScrollPane();
-        jSeparator4 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D5 = new javax.swing.JScrollPane();
-        jSeparator7 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D6 = new javax.swing.JScrollPane();
-        jSeparator8 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D7 = new javax.swing.JScrollPane();
-        jSeparator9 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D8 = new javax.swing.JScrollPane();
-        jSeparator6 = new javax.swing.JToolBar.Separator();
         jScrollPaneVisu3D9 = new javax.swing.JScrollPane();
         statusBar = new javax.swing.JTextField();
         Step1 = new javax.swing.JLabel();
@@ -438,7 +432,7 @@ public class MainInterface extends javax.swing.JFrame {
                             .addGroup(DataSetPanelLayout.createSequentialGroup()
                                 .addComponent(DataSetDescriptionLabel1)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE))
-                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 219, Short.MAX_VALUE)))
+                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
                     .addGroup(DataSetPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(loadXLSfile, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -515,26 +509,26 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 123, Short.MAX_VALUE)
+                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 106, Short.MAX_VALUE)
+                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 179, Short.MAX_VALUE)
+                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
+                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 140, Short.MAX_VALUE)
+                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
                         .addGap(22, 22, 22))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE)
-                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 784, Short.MAX_VALUE))
+                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
+                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         VisualizationPanelLayout.setVerticalGroup(
             VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
-                .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 484, Short.MAX_VALUE)
+                .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.DEFAULT_SIZE, 490, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(TauxSimilarite, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -592,14 +586,14 @@ public class MainInterface extends javax.swing.JFrame {
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(VisualizationDescriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                .addComponent(VisualizationDescriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(VisualizationDescriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 354, Short.MAX_VALUE)
+                .addComponent(VisualizationDescriptionPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 360, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -715,25 +709,25 @@ public class MainInterface extends javax.swing.JFrame {
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(CameraPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                .addComponent(CameraPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                 .addContainerGap())
             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel7Layout.createSequentialGroup()
                     .addContainerGap()
-                    .addComponent(AxesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 436, Short.MAX_VALUE)
+                    .addComponent(AxesPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                     .addContainerGap()))
         );
         jPanel7Layout.setVerticalGroup(
             jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel7Layout.createSequentialGroup()
-                .addContainerGap(170, Short.MAX_VALUE)
+                .addContainerGap(176, Short.MAX_VALUE)
                 .addComponent(CameraPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 167, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
             .addGroup(jPanel7Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel7Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(AxesPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(188, Short.MAX_VALUE)))
+                    .addContainerGap(194, Short.MAX_VALUE)))
         );
 
         jTabbedPane2.addTab("Axis & Camera", jPanel7);
@@ -853,7 +847,7 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(jPanel13Layout.createSequentialGroup()
                     .addContainerGap()
                     .addComponent(jButtonEchelleCouleursHaut, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(15, Short.MAX_VALUE)))
+                    .addContainerGap(17, Short.MAX_VALUE)))
         );
 
         jPanel13Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {attPyrHaut, attTextHaut});
@@ -1029,12 +1023,12 @@ public class MainInterface extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Object3DPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 417, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(31, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
         jPanel8Layout.setVerticalGroup(
             jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel8Layout.createSequentialGroup()
-                .addComponent(Object3DPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                .addComponent(Object3DPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 343, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -1237,7 +1231,7 @@ public class MainInterface extends javax.swing.JFrame {
             jPanel9Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(Space3DPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(Space3DPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 440, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel9Layout.setVerticalGroup(
@@ -1245,7 +1239,7 @@ public class MainInterface extends javax.swing.JFrame {
             .addGroup(jPanel9Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(Space3DPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 312, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(25, Short.MAX_VALUE))
+                .addContainerGap(31, Short.MAX_VALUE))
         );
 
         jTabbedPane2.addTab("3D Space", jPanel9);
@@ -1395,12 +1389,12 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                     .addComponent(ClusturingPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(NetworkPanel, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 422, Short.MAX_VALUE))
-                .addContainerGap(26, Short.MAX_VALUE))
+                .addContainerGap(28, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel10Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap(17, Short.MAX_VALUE)
                 .addComponent(NetworkPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 138, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(5, 5, 5)
                 .addComponent(ClusturingPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 194, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -1464,8 +1458,8 @@ public class MainInterface extends javax.swing.JFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(UserObjectivePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
-                    .addComponent(OthersPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE))
+                    .addComponent(UserObjectivePanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
+                    .addComponent(OthersPanel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel5Layout.setVerticalGroup(
@@ -1521,7 +1515,7 @@ public class MainInterface extends javax.swing.JFrame {
             jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(ProfilsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 441, Short.MAX_VALUE)
+                .addComponent(ProfilsPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 445, Short.MAX_VALUE)
                 .addContainerGap())
         );
         jPanel6Layout.setVerticalGroup(
@@ -1529,7 +1523,7 @@ public class MainInterface extends javax.swing.JFrame {
             .addGroup(jPanel6Layout.createSequentialGroup()
                 .addGap(17, 17, 17)
                 .addComponent(ProfilsPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 286, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(77, Short.MAX_VALUE))
+                .addContainerGap(79, Short.MAX_VALUE))
         );
 
         jTabbedPane1.addTab("Profils", jPanel6);
@@ -1543,63 +1537,51 @@ public class MainInterface extends javax.swing.JFrame {
 
         DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationToolBar);
         DB_Visualisations_ScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(" Suggested visualizations "));
+        DB_Visualisations_ScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         DB_Visualisations_ScrollPane.setAutoscrolls(true);
-        DB_Visualisations_ScrollPane.setPreferredSize(new java.awt.Dimension(1300, 310));
+        DB_Visualisations_ScrollPane.setPreferredSize(new java.awt.Dimension(3000, 310));
 
-        DB_VisualizationToolBar.setBorder(null);
-        DB_VisualizationToolBar.setRollover(true);
-        DB_VisualizationToolBar.setAutoscrolls(true);
+        javax.swing.GroupLayout DB_VisualizationPanelLayout = new javax.swing.GroupLayout(DB_VisualizationPanel);
+        DB_VisualizationPanel.setLayout(DB_VisualizationPanelLayout);
+        DB_VisualizationPanelLayout.setHorizontalGroup(
+            DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DB_VisualizationPanelLayout.createSequentialGroup()
+                .addComponent(jScrollPaneVisu3D1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D4, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D5, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D6, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D7, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D8, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jScrollPaneVisu3D9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14))
+        );
+        DB_VisualizationPanelLayout.setVerticalGroup(
+            DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(DB_VisualizationPanelLayout.createSequentialGroup()
+                .addGroup(DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPaneVisu3D1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D4, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D5, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D6, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D7, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D8, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jScrollPaneVisu3D9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(59, 59, 59))
+        );
 
-        //Visualisation_Nuage_3D visu3D10 = new Visualisation_Nuage_3D(0, 0, 0);
-        //String XMLFilepath = "C:\\Users\\Abdelheq\\Desktop\\Base de données de tests\\CD\\listeCD.xml";
-        //visu3D10.ConfigurationNuage3D(XMLFilepath, "profil"+1);
-        //visu3D10.createScene();
-        //// Code of sub-components and layout - not shown here
-        //jScrollPaneVisu3D1.setViewportView(visu3D10.getCustomCanvas3D());
-
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D1);
-        DB_VisualizationToolBar.add(jSeparator2);
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D2);
-        DB_VisualizationToolBar.add(jSeparator11);
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D3);
-        DB_VisualizationToolBar.add(jSeparator3);
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D4);
-        DB_VisualizationToolBar.add(jSeparator4);
-
-        //Visualisation_Nuage_3D visu3D12 = new Visualisation_Nuage_3D(0, 0, 0);
-        ////String XMLFilepath = "C:\\Users\\Abdelheq\\Desktop\\Base de données de tests\\CD\\listeCD.xml";
-        //visu3D12.ConfigurationNuage3D(XMLFilepath, "profil"+3);
-        //visu3D12.createScene();
-        //// Code of sub-components and layout - not shown here
-        //jScrollPaneVisu3D3.setViewportView(visu3D12.getCustomCanvas3D());
-
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D5);
-        DB_VisualizationToolBar.add(jSeparator7);
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D6);
-        DB_VisualizationToolBar.add(jSeparator8);
-
-        //Visualisation_Nuage_3D visu3D13 = new Visualisation_Nuage_3D(0, 0, 0);
-        ////String XMLFilepath = "C:\\Users\\Abdelheq\\Desktop\\Base de données de tests\\CD\\listeCD.xml";
-        //visu3D13.ConfigurationNuage3D(XMLFilepath, "profil"+4);
-        //visu3D13.createScene();
-        //// Code of sub-components and layout - not shown here
-        //jScrollPaneVisu3D4.setViewportView(visu3D13.getCustomCanvas3D());
-
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D7);
-        DB_VisualizationToolBar.add(jSeparator9);
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D8);
-        DB_VisualizationToolBar.add(jSeparator6);
-
-        //Visualisation_Nuage_3D visu3D14 = new Visualisation_Nuage_3D(0, 0, 0);
-        ////String XMLFilepath = "C:\\Users\\Abdelheq\\Desktop\\Base de données de tests\\CD\\listeCD.xml";
-        //visu3D14.ConfigurationNuage3D(XMLFilepath, "profil"+5);
-        //visu3D14.createScene();
-        //// Code of sub-components and layout - not shown here
-        //jScrollPaneVisu3D5.setViewportView(visu3D14.getCustomCanvas3D());
-
-        DB_VisualizationToolBar.add(jScrollPaneVisu3D9);
-
-        DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationToolBar);
+        DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationPanel);
 
         statusBar.setEditable(false);
         statusBar.setPreferredSize(new java.awt.Dimension(6, 23));
@@ -1701,14 +1683,14 @@ public class MainInterface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(DataSetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 499, Short.MAX_VALUE))
+                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(DB_Visualisations_ScrollPane, 0, 0, Short.MAX_VALUE)
+                                .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 820, Short.MAX_VALUE)))
+                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1719,13 +1701,13 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Step6)))
                 .addContainerGap())
-            .addComponent(statusBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1355, Short.MAX_VALUE)
+            .addComponent(statusBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1357, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filePathValue, javax.swing.GroupLayout.PREFERRED_SIZE, 969, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(243, Short.MAX_VALUE))
+                .addContainerGap(248, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1740,7 +1722,7 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 263, Short.MAX_VALUE)))
+                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(DataSetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -4882,7 +4864,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JLabel Color5Label;
     private javax.swing.JButton Connexion;
     private javax.swing.JScrollPane DB_Visualisations_ScrollPane;
-    private javax.swing.JToolBar DB_VisualizationToolBar;
+    private javax.swing.JPanel DB_VisualizationPanel;
     private javax.swing.JMenuItem DataSetDescriptionItem;
     private javax.swing.JLabel DataSetDescriptionLabel;
     private javax.swing.JLabel DataSetDescriptionLabel1;
@@ -5023,15 +5005,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JScrollPane jScrollPaneVisu3D8;
     private javax.swing.JScrollPane jScrollPaneVisu3D9;
     private javax.swing.JPopupMenu.Separator jSeparator1;
-    private javax.swing.JToolBar.Separator jSeparator11;
-    private javax.swing.JToolBar.Separator jSeparator2;
-    private javax.swing.JToolBar.Separator jSeparator3;
-    private javax.swing.JToolBar.Separator jSeparator4;
     private javax.swing.JToolBar.Separator jSeparator5;
-    private javax.swing.JToolBar.Separator jSeparator6;
-    private javax.swing.JToolBar.Separator jSeparator7;
-    private javax.swing.JToolBar.Separator jSeparator8;
-    private javax.swing.JToolBar.Separator jSeparator9;
     private javax.swing.JSlider jSliderYeux;
     private javax.swing.JTabbedPane jTabbedPane1;
     private javax.swing.JTabbedPane jTabbedPane2;

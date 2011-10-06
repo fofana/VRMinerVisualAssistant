@@ -144,16 +144,16 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="DataSetPanel" max="32767" attributes="1"/>
-                          <Component id="UserPreferencePanel" alignment="0" pref="503" max="32767" attributes="1"/>
+                          <Component id="UserPreferencePanel" alignment="0" max="32767" attributes="1"/>
                       </Group>
                       <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="DB_Visualisations_ScrollPane" min="0" pref="0" max="32767" attributes="2"/>
+                              <Component id="DB_Visualisations_ScrollPane" pref="841" max="32767" attributes="2"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jSeparator5" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="VisualizationPanel" alignment="0" pref="824" max="32767" attributes="2"/>
+                          <Component id="VisualizationPanel" alignment="0" pref="847" max="32767" attributes="2"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -248,9 +248,9 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="DataSetDescriptionLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="139" max="32767" attributes="0"/>
+                                  <EmptySpace pref="116" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="MatchingScrollPane" pref="225" max="32767" attributes="1"/>
+                              <Component id="MatchingScrollPane" pref="202" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -376,21 +376,21 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                          <Component id="UserPreferencesButton" pref="125" max="32767" attributes="0"/>
+                          <Component id="UserPreferencesButton" pref="129" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="LoadXMLData" pref="109" max="32767" attributes="0"/>
+                          <Component id="LoadXMLData" pref="116" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="AdjustIECButton" pref="181" max="32767" attributes="0"/>
+                          <Component id="AdjustIECButton" pref="185" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="LaunchVisualizations" pref="165" max="32767" attributes="0"/>
+                          <Component id="LaunchVisualizations" pref="169" max="32767" attributes="0"/>
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                          <Component id="CloseButton" pref="142" max="32767" attributes="0"/>
+                          <Component id="CloseButton" pref="146" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="OverviewPictureContainer" alignment="0" pref="792" max="32767" attributes="0"/>
-                              <Component id="TauxSimilarite" alignment="0" pref="792" max="32767" attributes="0"/>
+                              <Component id="OverviewPictureContainer" alignment="0" pref="815" max="32767" attributes="0"/>
+                              <Component id="TauxSimilarite" alignment="0" pref="815" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -2637,9 +2637,10 @@
             <TitledBorder title=" Suggested visualizations "/>
           </Border>
         </Property>
+        <Property name="verticalScrollBarPolicy" type="int" value="21"/>
         <Property name="autoscrolls" type="boolean" value="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[1300, 310]"/>
+          <Dimension value="[3000, 310]"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -2649,83 +2650,86 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JToolBar" name="DB_VisualizationToolBar">
-          <Properties>
-            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
-              <Border info="null"/>
-            </Property>
-            <Property name="rollover" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
-              <Connection code="true" type="code"/>
-            </Property>
-            <Property name="autoscrolls" type="boolean" value="true"/>
-          </Properties>
-          <AuxValues>
-            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="IHM_Visual_Assistant_DB_VisualizationToolBar"/>
-          </AuxValues>
+        <Container class="javax.swing.JPanel" name="DB_VisualizationPanel">
 
-          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
+          <Layout>
+            <DimensionLayout dim="0">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" alignment="0" attributes="0">
+                      <Component id="jScrollPaneVisu3D1" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D2" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D3" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D4" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D5" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D6" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D7" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D8" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jScrollPaneVisu3D9" min="-2" pref="241" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+            <DimensionLayout dim="1">
+              <Group type="103" groupAlignment="0" attributes="0">
+                  <Group type="102" attributes="0">
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jScrollPaneVisu3D1" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D2" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D3" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D4" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D5" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D6" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D7" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D8" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                          <Component id="jScrollPaneVisu3D9" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
+                      </Group>
+                      <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
+                  </Group>
+              </Group>
+            </DimensionLayout>
+          </Layout>
           <SubComponents>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D1">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="//Visualisation_Nuage_3D visu3D10 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;//String XMLFilepath = &quot;C:\\Users\\Abdelheq\\Desktop\\Base de donn&#xe9;es de tests\\CD\\listeCD.xml&quot;;&#xa;//visu3D10.ConfigurationNuage3D(XMLFilepath, &quot;profil&quot;+1);&#xa;//visu3D10.createScene();&#xa;//// Code of sub-components and layout - not shown here&#xa;//jScrollPaneVisu3D1.setViewportView(visu3D10.getCustomCanvas3D());"/>
-              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator2">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D2">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator11">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D3">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator3">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D4">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator4">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D5">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="//Visualisation_Nuage_3D visu3D12 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;////String XMLFilepath = &quot;C:\\Users\\Abdelheq\\Desktop\\Base de donn&#xe9;es de tests\\CD\\listeCD.xml&quot;;&#xa;//visu3D12.ConfigurationNuage3D(XMLFilepath, &quot;profil&quot;+3);&#xa;//visu3D12.createScene();&#xa;//// Code of sub-components and layout - not shown here&#xa;//jScrollPaneVisu3D3.setViewportView(visu3D12.getCustomCanvas3D());"/>
-              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator7">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D6">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator8">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D7">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="//Visualisation_Nuage_3D visu3D13 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;////String XMLFilepath = &quot;C:\\Users\\Abdelheq\\Desktop\\Base de donn&#xe9;es de tests\\CD\\listeCD.xml&quot;;&#xa;//visu3D13.ConfigurationNuage3D(XMLFilepath, &quot;profil&quot;+4);&#xa;//visu3D13.createScene();&#xa;//// Code of sub-components and layout - not shown here&#xa;//jScrollPaneVisu3D4.setViewportView(visu3D13.getCustomCanvas3D());"/>
-              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator9">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D8">
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
-            <Component class="javax.swing.JToolBar$Separator" name="jSeparator6">
-            </Component>
             <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D9">
-              <AuxValues>
-                <AuxValue name="JavaCodeGenerator_LayoutCodePost" type="java.lang.String" value="//Visualisation_Nuage_3D visu3D14 = new Visualisation_Nuage_3D(0, 0, 0);&#xa;////String XMLFilepath = &quot;C:\\Users\\Abdelheq\\Desktop\\Base de donn&#xe9;es de tests\\CD\\listeCD.xml&quot;;&#xa;//visu3D14.ConfigurationNuage3D(XMLFilepath, &quot;profil&quot;+5);&#xa;//visu3D14.createScene();&#xa;//// Code of sub-components and layout - not shown here&#xa;//jScrollPaneVisu3D5.setViewportView(visu3D14.getCustomCanvas3D());"/>
-              </AuxValues>
 
               <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
             </Container>
