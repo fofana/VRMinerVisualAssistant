@@ -69,8 +69,11 @@ import VisualAssistantFDM.xml.UpdateXMLFile;
 import visualassistantfacv.VRMinerVisualAssistant;
 import VisualAssistantFDM.visualisation.ui.Visualisation;
 import VisualAssistantFDM.xml.VisuXMLReader;
+import java.awt.Rectangle;
+import java.awt.Robot;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
+import javax.swing.JLabel;
 import javax.swing.JProgressBar;
 import vrminerlib.control.meta.NoneVRMMetaControlInfo;
 import vrminerlib.object3d.Object3D;
@@ -355,6 +358,7 @@ public class MainInterface extends javax.swing.JFrame {
         DB_Visualisations_ScrollPane = new javax.swing.JScrollPane(DB_VisualizationToolBar);
         DB_VisualizationPanel = new javax.swing.JPanel();
         jScrollPaneVisu3D1 = new javax.swing.JScrollPane();
+        DB_VisualizationLabel3D1 = new javax.swing.JLabel();
         jScrollPaneVisu3D2 = new javax.swing.JScrollPane();
         jScrollPaneVisu3D3 = new javax.swing.JScrollPane();
         jScrollPaneVisu3D4 = new javax.swing.JScrollPane();
@@ -431,8 +435,8 @@ public class MainInterface extends javax.swing.JFrame {
                         .addGroup(DataSetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(DataSetPanelLayout.createSequentialGroup()
                                 .addComponent(DataSetDescriptionLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 116, Short.MAX_VALUE))
-                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 202, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE))
+                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
                     .addGroup(DataSetPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(loadXLSfile, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -509,20 +513,20 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 129, Short.MAX_VALUE)
+                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 116, Short.MAX_VALUE)
+                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
+                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 169, Short.MAX_VALUE)
+                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 146, Short.MAX_VALUE)
+                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
                         .addGap(22, 22, 22))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE)
-                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 815, Short.MAX_VALUE))
+                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)
+                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         VisualizationPanelLayout.setVerticalGroup(
@@ -575,6 +579,11 @@ public class MainInterface extends javax.swing.JFrame {
         VisualizationDescriptionPanel.add(SP_VisualAttributeDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 154, 315, 190));
 
         jButton5.setText("Save");
+        jButton5.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton5ActionPerformed(evt);
+            }
+        });
         VisualizationDescriptionPanel.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 257, 78, -1));
 
         jButton3.setText("Add");
@@ -1541,6 +1550,8 @@ public class MainInterface extends javax.swing.JFrame {
         DB_Visualisations_ScrollPane.setAutoscrolls(true);
         DB_Visualisations_ScrollPane.setPreferredSize(new java.awt.Dimension(3000, 310));
 
+        jScrollPaneVisu3D1.setViewportView(DB_VisualizationLabel3D1);
+
         javax.swing.GroupLayout DB_VisualizationPanelLayout = new javax.swing.GroupLayout(DB_VisualizationPanel);
         DB_VisualizationPanel.setLayout(DB_VisualizationPanelLayout);
         DB_VisualizationPanelLayout.setHorizontalGroup(
@@ -1683,14 +1694,16 @@ public class MainInterface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(DataSetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)
+                                .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 847, Short.MAX_VALUE)))
+                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1725,7 +1738,7 @@ public class MainInterface extends javax.swing.JFrame {
                             .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(DataSetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(UserPreferencePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -2509,6 +2522,10 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
             
         }
 }//GEN-LAST:event_UserPreferencesButtonActionPerformed
+
+private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
+    // TODO add your handling code here:
+}//GEN-LAST:event_jButton5ActionPerformed
 
     public void AddNewUserPofilSettings(int indexProfil, File xml, List<Visualisation> listVisualAtt, List<Appariement> ResultMEC, String ElemGraph){
 
@@ -3941,6 +3958,26 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         visu3D1.ConfigurationNuage3D(XMLFilepath, "profil"+1);
         visu3D1.createScene();
         jScrollPaneVisu3D1.setViewportView(visu3D1.getCustomCanvas3D());
+//        Robot robot = new Robot();
+//        BufferedImage BI2 = robot.createScreenCapture(new Rectangle(
+//                jScrollPaneVisu3D1.getX(),
+//                jScrollPaneVisu3D1.getY(), jScrollPaneVisu3D1.getWidth(), jScrollPaneVisu3D1.getHeight()));
+//        Image I = jScrollPaneVisu3D1.createImage(241, 241);
+//        BufferedImage BI = new BufferedImage(241, 241, BufferedImage.TYPE_INT_RGB);
+//        Graphics2D g = BI.createGraphics();
+//        // Paint the image onto the buffered image
+//        g.drawImage(I, 0, 0, null);
+//        g.dispose();
+//
+//         //jScrollPaneVisu3D1.setViewportView(visu3D1.getCustomCanvas3D());
+//         File fichier = new File("C:/test1.png");
+//         ImageIO.write(BI2,"png", new File("3D2.png"));
+//         ImageIcon imageIcon = new ImageIcon(I);
+//         DB_VisualizationLabel3D1 = new JLabel(imageIcon);
+//         DB_VisualizationLabel3D1.setVisible(true);
+         //saveImage(I1,fichier);
+        //jScrollPaneVisu3D1.setViewportView(DB_VisualizationLabel3D1);
+        //jScrollPaneVisu3D1.a
         visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
         @Override
         public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
@@ -4040,6 +4077,44 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
                
     }
 
+    public void saveImage(Component component, File destination){
+                // Creer a blank picture where each pixel is black
+		BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB);
+
+		Graphics2D g2d = image.createGraphics();
+		component.paint(g2d);
+		g2d.dispose();
+
+		try {
+			ImageIO.write(image, "jpeg", destination);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
+    /**
+     * Obtenir une image à  partir d'une vue
+     */
+
+    public Image getImage(Component component){
+       if(component==null){return null;}
+       int width = 241;
+       int height = 241;
+       BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
+       Graphics2D g = image.createGraphics();
+       component.paintAll(g);
+       //g.drawImage(source, 0, 0, width, height, null);
+       g.dispose();
+       return image;
+    }
+
+     private static Image scale(Image source, int width, int height) {
+        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = buf.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(source, 0, 0, width, height, null);
+        g.dispose();
+        return buf;
+    }
     /**
      * Methode pour la mise à jour de l'afichage de l'aperçu de la visualisation sélectionnée
      * @param path adresse du fichier xml à visualiser  
@@ -4500,14 +4575,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
 
     }
     
-    private static Image scale(Image source, int width, int height) {
-        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = buf.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(source, 0, 0, width, height, null);
-        g.dispose();
-        return buf;
-    }
+   
 
     public String getBkgdColorView() {
         return "" + bkgdColorView.getBackground().getRGB();
@@ -4864,6 +4932,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JLabel Color5Label;
     private javax.swing.JButton Connexion;
     private javax.swing.JScrollPane DB_Visualisations_ScrollPane;
+    private javax.swing.JLabel DB_VisualizationLabel3D1;
     private javax.swing.JPanel DB_VisualizationPanel;
     private javax.swing.JMenuItem DataSetDescriptionItem;
     private javax.swing.JLabel DataSetDescriptionLabel;
