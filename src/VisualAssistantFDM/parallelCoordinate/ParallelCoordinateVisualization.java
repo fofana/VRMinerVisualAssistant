@@ -118,6 +118,7 @@ private void urlFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
 }//GEN-LAST:event_urlFieldActionPerformed
 
+ 
 private void jButton1openItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1openItemActionPerformed
         JFileChooser chooser = new JFileChooser();
         chooser.setFileFilter(new javax.swing.filechooser.FileFilter(){
