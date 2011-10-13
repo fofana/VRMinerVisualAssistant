@@ -69,16 +69,21 @@ import VisualAssistantFDM.xml.UpdateXMLFile;
 import visualassistantfacv.VRMinerVisualAssistant;
 import VisualAssistantFDM.visualisation.ui.Visualisation;
 import VisualAssistantFDM.xml.VisuXMLReader;
+import com.sun.image.codec.jpeg.JPEGImageEncoder;
+import java.awt.Graphics;
 import java.awt.Rectangle;
 import java.awt.Robot;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
 import javax.swing.JLabel;
 import javax.swing.JProgressBar;
+import javax.swing.JViewport;
 import vrminerlib.control.meta.NoneVRMMetaControlInfo;
 import vrminerlib.object3d.Object3D;
 import vrminerlib.scene.PointOfView;
 import vrminerlib.scene.PointOfViewMouseAdapter;
+import com.sun.image.codec.jpeg.JPEGCodec;
+import com.sun.image.codec.jpeg.JPEGEncodeParam;
 
 /*
  * To change this template, choose Tools | Templates
@@ -3958,26 +3963,24 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         visu3D1.ConfigurationNuage3D(XMLFilepath, "profil"+1);
         visu3D1.createScene();
         jScrollPaneVisu3D1.setViewportView(visu3D1.getCustomCanvas3D());
-//        Robot robot = new Robot();
-//        BufferedImage BI2 = robot.createScreenCapture(new Rectangle(
-//                jScrollPaneVisu3D1.getX(),
-//                jScrollPaneVisu3D1.getY(), jScrollPaneVisu3D1.getWidth(), jScrollPaneVisu3D1.getHeight()));
-//        Image I = jScrollPaneVisu3D1.createImage(241, 241);
-//        BufferedImage BI = new BufferedImage(241, 241, BufferedImage.TYPE_INT_RGB);
-//        Graphics2D g = BI.createGraphics();
-//        // Paint the image onto the buffered image
-//        g.drawImage(I, 0, 0, null);
-//        g.dispose();
+//        JViewport view = jScrollPaneVisu3D1.getViewport();
 //
-//         //jScrollPaneVisu3D1.setViewportView(visu3D1.getCustomCanvas3D());
-//         File fichier = new File("C:/test1.png");
-//         ImageIO.write(BI2,"png", new File("3D2.png"));
-//         ImageIcon imageIcon = new ImageIcon(I);
-//         DB_VisualizationLabel3D1 = new JLabel(imageIcon);
-//         DB_VisualizationLabel3D1.setVisible(true);
-         //saveImage(I1,fichier);
-        //jScrollPaneVisu3D1.setViewportView(DB_VisualizationLabel3D1);
-        //jScrollPaneVisu3D1.a
+//        Dimension size = view.getViewSize();
+//        Image capture = view.createImage(size.width, size.height);
+//
+//        Graphics captureG = capture.getGraphics();
+//        view.paint(captureG);
+//        FileOutputStream out = new FileOutputStream(file);
+//        BufferedImage image = null;
+//        image = (BufferedImage)capture;
+//        if (image != null) {
+//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
+//            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
+//            param.setQuality(0.8f,true);
+//            encoder.encode(image, param);
+//            out.flush();
+//            out.close();
+//        }
         visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
         @Override
         public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
