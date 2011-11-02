@@ -71,10 +71,10 @@ public class LoadVisualizations extends JPanel{
         List<PreView> imageNames = new ArrayList<PreView>();
         for(int j=0; j<imageFileNames.size(); j++){
         PreView DB_vis = new PreView();
-        DB_vis.setNom(imageFileNames.get(j).getNom());
-        DB_vis.setIdmethode(imageFileNames.get(j).getIdmethode());
-        DB_vis.setIdimage(imageFileNames.get(j).getIdimage());
-        imageNames.add(DB_vis);
+            DB_vis.setNom(imageFileNames.get(j).getNom());
+            DB_vis.setIdmethode(imageFileNames.get(j).getIdmethode());
+            DB_vis.setIdimage(imageFileNames.get(j).getIdimage());
+            imageNames.add(DB_vis);
         }
        return imageNames;
     }
@@ -434,7 +434,7 @@ public class LoadVisualizations extends JPanel{
 
         return listAttribVisuelMEC;
     }
-
+    
     public String getIdElement(int id) throws Exception {
 
         List<Methode> methode_Liste = new ArrayList<Methode>();
@@ -445,6 +445,28 @@ public class LoadVisualizations extends JPanel{
         element_Liste = getElementGraphique(methode_Liste.get(0).getIdmethode());
         elementGraphique = element_Liste.get(0).getNom().toString();
         return elementGraphique;
+    }
+
+      public List<Methode> getAllMethode() throws Exception{
+        List<Methode> methodeListe = new ArrayList<Methode>();
+        String sql_methode ="Select * from methode";
+        this.connection = (Connection) Connexion.getConnexion();
+        stmt = (Statement) connection.createStatement();
+        resultat = stmt.executeQuery(sql_methode);
+        while (resultat.next())
+        {
+           Methode methode = new Methode();
+           methode.setIdmethode(Integer.parseInt(resultat.getString("idmethode")));
+           methode.setNom(resultat.getString("nom"));
+           methode.setDescription(resultat.getString("description"));
+           methode.setLien(resultat.getString("lien"));
+           methodeListe.add(methode);
+        }
+        //executer la requête sql
+        stmt.close();
+        connection.close();
+
+      return methodeListe;
     }
 
 }

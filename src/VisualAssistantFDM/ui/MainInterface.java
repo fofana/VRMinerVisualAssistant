@@ -4,8 +4,9 @@ package VisualAssistantFDM.ui;
 
 
 
+import ParallelCoordinate.file.XMLFile;
+import ParallelCoordinate.ui.ParallelDisplay;
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.awt.Image;
@@ -69,21 +70,16 @@ import VisualAssistantFDM.xml.UpdateXMLFile;
 import visualassistantfacv.VRMinerVisualAssistant;
 import VisualAssistantFDM.visualisation.ui.Visualisation;
 import VisualAssistantFDM.xml.VisuXMLReader;
-import com.sun.image.codec.jpeg.JPEGImageEncoder;
-import java.awt.Graphics;
-import java.awt.Rectangle;
-import java.awt.Robot;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseListener;
+import java.net.URL;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
-import javax.swing.JLabel;
 import javax.swing.JProgressBar;
-import javax.swing.JViewport;
 import vrminerlib.control.meta.NoneVRMMetaControlInfo;
 import vrminerlib.object3d.Object3D;
 import vrminerlib.scene.PointOfView;
 import vrminerlib.scene.PointOfViewMouseAdapter;
-import com.sun.image.codec.jpeg.JPEGCodec;
-import com.sun.image.codec.jpeg.JPEGEncodeParam;
 
 /*
  * To change this template, choose Tools | Templates
@@ -110,7 +106,7 @@ public class MainInterface extends javax.swing.JFrame {
     private List<Normalisation> listNormalisation;
     private List<Visualisation> liste, listdtm, listAttribute, DataAttribute_liste;
     private int idMethode, thumbnailIconDimension, profilNum;
-    public String filePathName, imageDir = "images/", shape, afficherLiensS, jCheckBoxReseauS, colNameDataSet[] = {"Data Attribute", "Importance"}, colNameVisualization[] = {"Visual Attribute", "Type", "Importance"}, colNameDataSetMEC[] = {"Indice Visuel", "Attribut de données"};
+    public String filePathName, imageDir = "images/", shape, afficherLiensS, jCheckBoxReseauS, colNameDataSet[] = {"Data Attribute", "Importance"}, colNameVisualization[] = {"Visual Attribute", "Type", "Importance"}, colNameDataSetMEC[] = {"Indice Visuel", "Attribut de donnï¿½es"};
     private Object[][] data = null, visualAttribute = null;;
     private DefaultTableModel DataSetTableModel, VisualAttributeTableModel, MatchingTableModel, MatchingTableModelMEC;
     private DefaultListModel model_list_profil, model_list_profil_selection, AllExpertObjectiveListModel, ExpertObjectiveListModel, CatgoryListModel, AllVisualizationCatgoryListModel, VisualizationCatgoryListModel, ProfilListModel;
@@ -119,6 +115,7 @@ public class MainInterface extends javax.swing.JFrame {
     private List<Appariement> individuMEC;
     private double similarite;
     public Visualisation_Nuage_3D visu3D, visu3D1, visu3D2, visu3D3, visu3D4, visu3D5, visu3D6, visu3D7, visu3D8, visu3D9;
+    public List<Visualisation_Nuage_3D> listVisu3D;
     private VisuXMLReader xmlParser;
     private ArrayList listTypeVisu = new ArrayList();
     private JTabbedPane AdvancedSettings = new JTabbedPane();
@@ -134,8 +131,9 @@ public class MainInterface extends javax.swing.JFrame {
     private List<Double> objectivesWeight;
     private UserObjectivesDialog dialog;
     private LoadingBox loading;
-    private Component DB_VisualizationToolBar;
-    
+    private int numMethode;
+    private List<JScrollPane> listJScrollPaneVisu3D;
+    private ParallelDisplay parallelDisplay;
     /**
      * Constructeur creates new form VRMinerVisualAssistant
      */
@@ -170,6 +168,14 @@ public class MainInterface extends javax.swing.JFrame {
         imageCaptions = new LoadVisualizations().getCaption();
         //loadimages.execute();
         dialog = new UserObjectivesDialog(this, true);
+        numMethode = new LoadVisualizations().getAllMethode().size();       
+        listVisu3D = new ArrayList<Visualisation_Nuage_3D>();        
+        listJScrollPaneVisu3D = new ArrayList<JScrollPane>();
+        for (int i = 0; i<numMethode; i++){
+            Visualisation_Nuage_3D Visu = new Visualisation_Nuage_3D(0, 0, 0);
+            listVisu3D.add(Visu);
+        }
+        parallelDisplay = new ParallelDisplay();
     }
 
     /** This method is called from within the constructor to
@@ -361,17 +367,8 @@ public class MainInterface extends javax.swing.JFrame {
         UpdateProfil = new javax.swing.JButton();
         GenerateNewProfil = new javax.swing.JButton();
         DB_Visualisations_ScrollPane = new javax.swing.JScrollPane(DB_VisualizationToolBar);
-        DB_VisualizationPanel = new javax.swing.JPanel();
-        jScrollPaneVisu3D1 = new javax.swing.JScrollPane();
-        DB_VisualizationLabel3D1 = new javax.swing.JLabel();
-        jScrollPaneVisu3D2 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D3 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D4 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D5 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D6 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D7 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D8 = new javax.swing.JScrollPane();
-        jScrollPaneVisu3D9 = new javax.swing.JScrollPane();
+        DB_VisualizationToolBar = new javax.swing.JToolBar();
+        jPanelVisu = new javax.swing.JPanel();
         statusBar = new javax.swing.JTextField();
         Step1 = new javax.swing.JLabel();
         Step2 = new javax.swing.JLabel();
@@ -400,7 +397,6 @@ public class MainInterface extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("INTERACTIVE USER VISUAL ASSISTANT ");
         setBackground(new java.awt.Color(102, 153, 255));
-        setResizable(false);
 
         DataSetPanel.setBorder(javax.swing.BorderFactory.createTitledBorder(javax.swing.BorderFactory.createTitledBorder(""), "Data Attribute Description "));
 
@@ -440,8 +436,8 @@ public class MainInterface extends javax.swing.JFrame {
                         .addGroup(DataSetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(DataSetPanelLayout.createSequentialGroup()
                                 .addComponent(DataSetDescriptionLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 126, Short.MAX_VALUE))
-                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 212, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE))
+                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)))
                     .addGroup(DataSetPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(loadXLSfile, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -518,20 +514,20 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE)
+                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 115, Short.MAX_VALUE)
+                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 184, Short.MAX_VALUE)
+                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 168, Short.MAX_VALUE)
+                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 144, Short.MAX_VALUE)
+                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addGap(22, 22, 22))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE)
-                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 809, Short.MAX_VALUE))
+                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
+                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         VisualizationPanelLayout.setVerticalGroup(
@@ -584,11 +580,6 @@ public class MainInterface extends javax.swing.JFrame {
         VisualizationDescriptionPanel.add(SP_VisualAttributeDescription, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 154, 315, 190));
 
         jButton5.setText("Save");
-        jButton5.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton5ActionPerformed(evt);
-            }
-        });
         VisualizationDescriptionPanel.add(jButton5, new org.netbeans.lib.awtextra.AbsoluteConstraints(345, 257, 78, -1));
 
         jButton3.setText("Add");
@@ -1551,53 +1542,26 @@ public class MainInterface extends javax.swing.JFrame {
 
         DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationToolBar);
         DB_Visualisations_ScrollPane.setBorder(javax.swing.BorderFactory.createTitledBorder(" Suggested visualizations "));
-        DB_Visualisations_ScrollPane.setVerticalScrollBarPolicy(javax.swing.ScrollPaneConstants.VERTICAL_SCROLLBAR_NEVER);
         DB_Visualisations_ScrollPane.setAutoscrolls(true);
-        DB_Visualisations_ScrollPane.setPreferredSize(new java.awt.Dimension(3000, 310));
+        DB_Visualisations_ScrollPane.setPreferredSize(new java.awt.Dimension(1300, 310));
 
-        jScrollPaneVisu3D1.setViewportView(DB_VisualizationLabel3D1);
+        DB_VisualizationToolBar.setBorder(null);
+        DB_VisualizationToolBar.setRollover(true);
 
-        javax.swing.GroupLayout DB_VisualizationPanelLayout = new javax.swing.GroupLayout(DB_VisualizationPanel);
-        DB_VisualizationPanel.setLayout(DB_VisualizationPanelLayout);
-        DB_VisualizationPanelLayout.setHorizontalGroup(
-            DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DB_VisualizationPanelLayout.createSequentialGroup()
-                .addComponent(jScrollPaneVisu3D1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D4, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D5, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D6, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D7, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D8, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPaneVisu3D9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(14, 14, 14))
+        javax.swing.GroupLayout jPanelVisuLayout = new javax.swing.GroupLayout(jPanelVisu);
+        jPanelVisu.setLayout(jPanelVisuLayout);
+        jPanelVisuLayout.setHorizontalGroup(
+            jPanelVisuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 585, Short.MAX_VALUE)
         );
-        DB_VisualizationPanelLayout.setVerticalGroup(
-            DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(DB_VisualizationPanelLayout.createSequentialGroup()
-                .addGroup(DB_VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPaneVisu3D1, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D2, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D3, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D4, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D5, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D6, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D7, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D8, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPaneVisu3D9, javax.swing.GroupLayout.PREFERRED_SIZE, 241, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(59, 59, 59))
+        jPanelVisuLayout.setVerticalGroup(
+            jPanelVisuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 207, Short.MAX_VALUE)
         );
 
-        DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationPanel);
+        DB_VisualizationToolBar.add(jPanelVisu);
+
+        DB_Visualisations_ScrollPane.setViewportView(DB_VisualizationToolBar);
 
         statusBar.setEditable(false);
         statusBar.setPreferredSize(new java.awt.Dimension(6, 23));
@@ -1699,16 +1663,14 @@ public class MainInterface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(DataSetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(10, 10, 10)
-                                .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 835, Short.MAX_VALUE)
+                                .addComponent(DB_Visualisations_ScrollPane, 0, 0, Short.MAX_VALUE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 841, Short.MAX_VALUE)))
+                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1719,13 +1681,13 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Step6)))
                 .addContainerGap())
-            .addComponent(statusBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1357, Short.MAX_VALUE)
+            .addComponent(statusBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filePathValue, javax.swing.GroupLayout.PREFERRED_SIZE, 969, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(248, Short.MAX_VALUE))
+                .addContainerGap(39, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1740,10 +1702,10 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)))
+                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(DataSetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(UserPreferencePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(0, 0, 0)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
@@ -1760,19 +1722,15 @@ public class MainInterface extends javax.swing.JFrame {
         statusBar.setText("VRMinerVisualAssistant - V1.1 (Février 2011)");
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-1373)/2, (screenSize.height-995)/2, 1373, 995);
+        setBounds((screenSize.width-1164)/2, (screenSize.height-886)/2, 1164, 886);
     }// </editor-fold>//GEN-END:initComponents
 
     public ArrayList getTypeVisu() {
             return listTypeVisu;
     }
     /**
-     * Methode pour le chargement des données à partir du fichier xml
+     * Methode pour le chargement des donnï¿½es ï¿½ partir du fichier xml
      * @param evt
-     */
-    /* @ author comment: Fofana
-     * Methode principale: Load
-     * chargement des données
      */
     private void LoadXMLDataActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_LoadXMLDataActionPerformed
         
@@ -1790,15 +1748,16 @@ public class MainInterface extends javax.swing.JFrame {
             try{
             liste = new Matching().getListe(filePathName);
             System.out.println("List size : "+liste.size());
+            // get DataList
             liste = new Matching().getListeTri(liste);
             listNormalisation = new ArrayList<Normalisation>();
             for(int i=0; i<liste.size(); i++){
                 Normalisation result = new Normalisation();
                 if(liste.get(i).getType().equals("numeric")){
-                    result.setNom(liste.get(i).getName());
-                    result.setMin(0);
-                    result.setMax(0);
-                    listNormalisation.add(result);
+                result.setNom(liste.get(i).getName());
+                result.setMin(0);
+                result.setMax(0);
+                listNormalisation.add(result);
                 }
             }
 
@@ -1810,36 +1769,13 @@ public class MainInterface extends javax.swing.JFrame {
 
             final File Fichier;
             Fichier = chooser.getSelectedFile();
-//            Thread t = new Thread() {
-//                            private VisuXMLReader xml;
-//
-//                            @Override
-//                            public void run() {
-//
-//                                try {
-//                                    String f = Fichier.getAbsolutePath();
-//                                    xml = new VisuXMLReader(f);
-//                                    xml.setNameFile(Fichier.getName());
-//                                    xml.readXmlFile();
-//                                    xml.parseData();
-//                                    xml.setParsed(true);
-//                                    xmlParser = xml;
-//				}
-//                                catch (Exception ex) {
-//                                    xml.getLoading().dispose();
-//                                    new MessageBox("Erreur XML", "Erreur de Lecture du fichier XML", MessageBox.ERROR);
-//
-//                                }
-//                            }
-//                        };
-//            t.start();
-
             Step3.setEnabled(false);
             Step6.setEnabled(false);
             File fichier = new File(filePathName);
+            // get VisualAtributes
             List<Visualisation> listViusaAttribute = new LoadVisualizations().getIdMethode(1);
             try {
-            new UpdateXMLFile(filePathName);
+                new UpdateXMLFile(filePathName);
             } catch (Exception ex) {
             Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
@@ -1850,6 +1786,7 @@ public class MainInterface extends javax.swing.JFrame {
             //getLoading();
             //getLoading().getProgressBar().setValue((int) (j / (float) (9) * 100));
             //getLoading().setAction("Lecture des elements du profil" + j);
+                // get Appariement
                 List<Appariement> individuResultatMEC = GenerateMatchingWithProfil(j);
                 shape = new LoadVisualizations().getIdElement(j);
                 AddNewUserPofilSettingsGA(j, fichier, listViusaAttribute, individuResultatMEC, shape);
@@ -1866,75 +1803,7 @@ public class MainInterface extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_LoadXMLDataActionPerformed
-
-    /**
-     * Methode pour le chargement des données à partir du fichier xml
-     * @param evt
-     */
-    /* @ author comment: Fofana
-     * Methode principale: Load
-     * chargement des données
-     */
-    private void LoadXMLDataFromFile() { // String XMLFile
-
-       
-            DataSetTableModel.setRowCount(0);
-            //filePathName = XMLFile;
-            //filePathValue.setText(chooser.getSelectedFile().getAbsolutePath());
-            System.out.println("List path : "+filePathName);
-            try{
-            liste = new Matching().getListe(filePathName);
-            System.out.println("List size : "+liste.size());
-            liste = new Matching().getListeTri(liste);
-            listNormalisation = new ArrayList<Normalisation>();
-            for(int i=0; i<liste.size(); i++){
-                Normalisation result = new Normalisation();
-                if(liste.get(i).getType().equals("numeric")){
-                    result.setNom(liste.get(i).getName());
-                    result.setMin(0);
-                    result.setMax(0);
-                    listNormalisation.add(result);
-                }
-            }
-
-            for(int i=0; i<liste.size();i++){
-                DataSetTableModel.addRow(new Object[]{liste.get(i).getName(),liste.get(i).getImportance(),liste.get(i).getType()});
-            }
-
-            DataSetTable.setModel(DataSetTableModel);
-
-            Step3.setEnabled(false);
-            Step6.setEnabled(false);
-            File fichier = new File(filePathName);
-            List<Visualisation> listViusaAttribute = new LoadVisualizations().getIdMethode(1);
-            try {
-            new UpdateXMLFile(filePathName);
-            } catch (Exception ex) {
-            Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
-            }
-            //loading = new LoadingBox("Load & Display Data on real-time");
-            //loading = new JProgressBar();
-            for(int j=1; j<=9; j++){
-            //Barre de progression pour la lecture:
-            //getLoading();
-            //getLoading().getProgressBar().setValue((int) (j / (float) (9) * 100));
-            //getLoading().setAction("Lecture des elements du profil" + j);
-                List<Appariement> individuResultatMEC = GenerateMatchingWithProfil(j);
-                shape = new LoadVisualizations().getIdElement(j);
-                AddNewUserPofilSettingsGA(j, fichier, listViusaAttribute, individuResultatMEC, shape);
-                enregistreFichier(filePathName);
-            }
-            AfficherIndividus(filePathName);
-            Step2.setEnabled(true);
-            //loadimages.execute();
-            }
-            catch(Exception ex){
-                JOptionPane.showMessageDialog(null, "erreur Loading XML File : " + ex.getMessage());
-            }
-
-
-        
-    }
+    
     public LoadingBox getLoading() {
         if (loading == null) {
             loading = new LoadingBox("Chargement ...", 0, 100);
@@ -1942,7 +1811,7 @@ public class MainInterface extends javax.swing.JFrame {
         return loading;
     }
     /**
-     * Methode pour lancer l'interface du paramétrage semi-automatique avec l'AGI
+     * Methode pour lancer l'interface du paramï¿½trage semi-automatique avec l'AGI
      * @param evt
      */
     private void AdjustIECButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdjustIECButtonActionPerformed
@@ -1962,15 +1831,15 @@ public class MainInterface extends javax.swing.JFrame {
     }//GEN-LAST:event_AdjustIECButtonActionPerformed
 
     /**
-     * Methode pour lancer enregistrer le paramétrage de la visualisation sélectionnée
+     * Methode pour lancer enregistrer le paramï¿½trage de la visualisation sï¿½lectionnï¿½e
      * @param evt
      */
     private void SaveVisualizationsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaveVisualizationsActionPerformed
     try {
             /**
-             * pour chaque individu séléctionner créer un nouveau noeud profil
-             * puis, l'associé au noeud nuage3D du noeud visualization,
-             * le numéro du profil sert juste à récuperer le profil
+             * pour chaque individu sï¿½lï¿½ctionner crï¿½er un nouveau noeud profil
+             * puis, l'associï¿½ au noeud nuage3D du noeud visualization,
+             * le numï¿½ro du profil sert juste ï¿½ rï¿½cuperer le profil
              */
 
             File f = new File(filePathName);
@@ -2480,7 +2349,7 @@ private void loadXLSfileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-F
                             xml.getLoading().dispose();
                             new MessageBox("Erreur XML", "Erreur de Lecture du fichier XML", MessageBox.ERROR);
                         }
-                        LoadXMLDataFromFile();
+
                     }
                 };
                 t.start();
@@ -2528,10 +2397,6 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         }
 }//GEN-LAST:event_UserPreferencesButtonActionPerformed
 
-private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-    // TODO add your handling code here:
-}//GEN-LAST:event_jButton5ActionPerformed
-
     public void AddNewUserPofilSettings(int indexProfil, File xml, List<Visualisation> listVisualAtt, List<Appariement> ResultMEC, String ElemGraph){
 
         SAXBuilder sxb = new SAXBuilder();
@@ -2539,11 +2404,11 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         float[] tabCoordMin;
         float[] tabCoordMax;
         try {
-        //On crée un nouveau document JDOM avec en argument le fichier XML
+        //On crï¿½e un nouveau document JDOM avec en argument le fichier XML
         document = sxb.build(xml);
-        //On initialise un nouvel élément racine avec l'élément racine du document.
+        //On initialise un nouvel ï¿½lï¿½ment racine avec l'ï¿½lï¿½ment racine du document.
         racine = document.getRootElement();
-        //ici on initialise les tableaux qui vont contenir les valeur max et min des attributs selectionnée pour les axes x, y et z
+        //ici on initialise les tableaux qui vont contenir les valeur max et min des attributs selectionnï¿½e pour les axes x, y et z
         List<Appariement> list_numerique = new ArrayList<Appariement>();
         List<Appariement> list_symbolique = new ArrayList<Appariement>();
         List<Appariement> list_texte = new ArrayList<Appariement>();
@@ -2623,11 +2488,11 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         tabCoordMin[a] = 1000f;
         }
         List listData = racine.getChildren("data");
-        //On crée un Iterator sur notre liste
+        //On crï¿½e un Iterator sur notre liste
         Iterator n = listData.iterator();
         while (n.hasNext()) {
-        //On recrée l'Element courant Ã  chaque tour de boucle afin de
-        //pouvoir utiliser les méthodes propres aux Element comme :
+        //On recrï¿½e l'Element courant Ã  chaque tour de boucle afin de
+        //pouvoir utiliser les mï¿½thodes propres aux Element comme :
         //selectionner un noeud fils, modifier du texte, etc...
         Element datum = (Element) n.next();
         List listDatum = datum.getChildren("datum");
@@ -2636,7 +2501,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Element courant = (Element) j.next();
         //On affiche le nom de l'element courant
         for (int k = 0; k < list_numerique.size(); k++) {
-                //ici on recupere les valeur max et min des attributs selectionnée pour les axes x, y et z
+                //ici on recupere les valeur max et min des attributs selectionnï¿½e pour les axes x, y et z
                 tabCoord[k] = Float.parseFloat(courant.getChild(""+list_numerique.get(k).getName_data()).getValue());
                 tabCoordMin[k] = (float) Math.min(tabCoord[k], tabCoordMin[k]);
                 tabCoordMax[k] = (float) Math.max(tabCoord[k], tabCoordMax[k]);
@@ -2653,7 +2518,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         racine.addContent(IGAName);
         }
 
-        //On crée une Liste contenant tous les noeuds "data" de l'Element racine
+        //On crï¿½e une Liste contenant tous les noeuds "data" de l'Element racine
         Element visu = (Element) racine.getChild("visualizations");
         Element typeVisu = (Element) visu.getChild("nuage3D");
         if (typeVisu == null) {
@@ -2662,8 +2527,8 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             typeVisu = (Element) visu.getChild("nuage3D");
         }
         Element profilDefaut = (Element) typeVisu.getChild("profilDefaut");
-        //On fait un test sur le profil selectionné par defaut Ã  l'ouverture du fichier xml
-        //s'il n'existe pas de profil par defaut on en créer un dans le fichier xml
+        //On fait un test sur le profil selectionnï¿½ par defaut Ã  l'ouverture du fichier xml
+        //s'il n'existe pas de profil par defaut on en crï¿½er un dans le fichier xml
 
         if (profilDefaut == null) {
             profilDefaut = new Element("profilDefaut");
@@ -2681,46 +2546,6 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
         profil.setAttribute("valeur", baliseProfil);
         profil.removeContent();
-
-
-        //Matching result
-        
-        //int compteur = 0;
-//        for(int i=0; i<listVisualAtt.size(); i++){
-//            Element  e = (Element) profil.getChild(listVisualAtt.get(i).getName());
-//            e = new Element(listVisualAtt.get(i).getName());
-//            profil.addContent(e);
-//            System.out.println("Element : "+listVisualAtt.get(i).getType().toString());
-//            if((listVisualAtt.get(i).getName().toString().equals("att3"))||(listVisualAtt.get(i).getName().toString().equals("att4"))&&(compteur >= individuMEC.size())){
-//                 e.setText("Pas de texte");
-//                 j++;
-//            } else if (listVisualAtt.get(i).getName().toString().equals("imgAtt")&&(compteur >= individuMEC.size())) {
-//                e.setText("Pas de texture");
-//                j++;
-//            }
-//            // A modifier : att2 dois contenir un attribut de données de type numérique
-//            else if (listVisualAtt.get(i).getName().toString().equals("att2")) {
-//                for(int u=0; u<individuMEC.size(); u++){
-//                    if(listVisualAtt.get(i).getType().toString().equals(individuMEC.get(u).getType_data().toString())){
-//                       e.setText(individuMEC.get(u).getName_data());
-//                       u=individuMEC.size();
-//                }
-//                //e.setText("Sepal_width");
-//                j++;
-//            }
-//            }
-//             else {
-//             e.setText(individuMEC.get(j).getName_data());
-//             j++;
-//             }
-//            //e.setText(individuMEC.get(j).getName_data());
-//            //j++;
-//            compteur++;
-//            if(j>individuMEC.size()-1){
-//            j=0;
-//            }
-//
-//        }
         int j = 0;
         for(int index=0; index<listVisualAtt.size(); index++){
 
@@ -3054,24 +2879,24 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         HashMap<String, HashMap> MapAttributPalette = new HashMap<String, HashMap>();
         Iterator<String> itOverAttribut = MapAttributPalette.keySet().iterator();
         while (itOverAttribut.hasNext()) {
-            // On récupÃ¨re le nom de l'attribut
+            // On rï¿½cupÃ¨re le nom de l'attribut
             String nomAttribut = itOverAttribut.next();
-            // Ajout au schéma XML
+            // Ajout au schï¿½ma XML
             Element attribut = new Element(nomAttribut);
             colorParam.addContent(attribut);
             // On parcourt ensuite la palette
             HashMap<String, Color> mapValeurColor = MapAttributPalette.get(nomAttribut);
             Iterator<String> itOverValeur = mapValeurColor.keySet().iterator();
             while (itOverValeur.hasNext()) {
-                // On récupÃ¨re la valeur de l'attribut
+                // On rï¿½cupÃ¨re la valeur de l'attribut
                 String valeurAttribut = itOverValeur.next();
-                // et sa couleur associée
+                // et sa couleur associï¿½e
                 Color couleur = mapValeurColor.get(valeurAttribut);
-                // On créer l'élément XML correspondant
+                // On crï¿½er l'ï¿½lï¿½ment XML correspondant
                 Element colorAttribute = new Element("color");
                 colorAttribute.setAttribute("for", valeurAttribut);
                 colorAttribute.setText(couleur.getRed() + "," + couleur.getGreen() + "," + couleur.getBlue());
-                // On l'ajoute au schéma XML
+                // On l'ajoute au schï¿½ma XML
                 attribut.addContent(colorAttribute);
             }
         }
@@ -3092,14 +2917,14 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         float[] tabCoordMinListe;
         float[] tabCoordMaxListe;
         try {
-        //On crée un nouveau document JDOM avec en argument le fichier XML
+        //On crï¿½e un nouveau document JDOM avec en argument le fichier XML
         document = sxb.build(xml);
-        //On initialise un nouvel élément racine avec l'élément racine du document.
+        //On initialise un nouvel ï¿½lï¿½ment racine avec l'ï¿½lï¿½ment racine du document.
         racine = document.getRootElement();
         for(int l=0; l<ResultMEC.size(); l++){
             System.out.println(ResultMEC.get(l).getName_data()+" -:- "+ResultMEC.get(l).getName_v_data());
         }
-        /*ici on initialise les tableaux qui vont contenir les valeur max et min des attributs selectionnée pour les axes x, y et z */
+        /*ici on initialise les tableaux qui vont contenir les valeur max et min des attributs selectionnï¿½e pour les axes x, y et z */
         List<Appariement> list_numerique = new ArrayList<Appariement>();
         List<Appariement> list_symbolique = new ArrayList<Appariement>();
         List<Appariement> list_texte = new ArrayList<Appariement>();
@@ -3186,11 +3011,11 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         tabCoordMinListe[a] = 1000f;
         }
         List listData = racine.getChildren("data");
-        //On crée un Iterator sur notre liste
+        //On crï¿½e un Iterator sur notre liste
         Iterator n = listData.iterator();
         while (n.hasNext()) {
-        //On recrée l'Element courant à  chaque tour de boucle afin de
-        //pouvoir utiliser les méthodes propres aux Element comme :
+        //On recrï¿½e l'Element courant ï¿½ chaque tour de boucle afin de
+        //pouvoir utiliser les mï¿½thodes propres aux Element comme :
         //selectionner un noeud fils, modifier du texte, etc...
         Element datum = (Element) n.next();
         List listDatum = datum.getChildren("datum");
@@ -3199,14 +3024,14 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Element courant = (Element) j.next();
         //On affiche le nom de l'element courant
         for (int k = 0; k < list_numerique.size(); k++) {
-                //ici on recupere les valeur max et min des attributs selectionnée pour les axes x, y et z
+                //ici on recupere les valeur max et min des attributs selectionnï¿½e pour les axes x, y et z
                 tabCoord[k] = Float.parseFloat(courant.getChild(""+list_numerique.get(k).getName_data()).getValue());
                 tabCoordMin[k] = (float) Math.min(tabCoord[k], tabCoordMin[k]);
                 tabCoordMax[k] = (float) Math.max(tabCoord[k], tabCoordMax[k]);
         }
-        /* On remplie le vecteur de poids des valuers de normalisation des axes à utiliser dans l'actulaisation des visualisations avec l'AGI */
+        /* On remplie le vecteur de poids des valuers de normalisation des axes ï¿½ utiliser dans l'actulaisation des visualisations avec l'AGI */
         for (int v = 0; v < listNormalisation.size(); v++) {
-                //ici on recupere les valeur max et min de tous les attributs de données pour les axes x, y et z
+                //ici on recupere les valeur max et min de tous les attributs de donnï¿½es pour les axes x, y et z
                 tabCoordListe[v] = Float.parseFloat(courant.getChild(""+listNormalisation.get(v).getNom()).getValue());
                 tabCoordMinListe[v] = (float) Math.min(tabCoordListe[v], tabCoordMinListe[v]);
                 tabCoordMaxListe[v] = (float) Math.max(tabCoordListe[v], tabCoordMaxListe[v]);
@@ -3223,7 +3048,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 listNormalisation.remove(i+1);
          }
 
-        //On crée une Liste contenant tous les noeuds "data" de l'Element racine
+        //On crï¿½e une Liste contenant tous les noeuds "data" de l'Element racine
         Element visu = (Element) racine.getChild("geneticalgorithm");
         Element typeVisu = (Element) visu.getChild("nuage3D");
         if (typeVisu == null) {
@@ -3232,8 +3057,8 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             typeVisu = (Element) visu.getChild("nuage3D");
         }
         Element profilDefaut = (Element) typeVisu.getChild("profilDefaut");
-        //On fait un test sur le profil selectionné par defaut Ã  l'ouverture du fichier xml
-        //s'il n'existe pas de profil par defaut on en créer un dans le fichier xml
+        //On fait un test sur le profil selectionnï¿½ par defaut Ã  l'ouverture du fichier xml
+        //s'il n'existe pas de profil par defaut on en crï¿½er un dans le fichier xml
 
         if (profilDefaut == null) {
             profilDefaut = new Element("profilDefaut");
@@ -3257,18 +3082,18 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
         System.out.println("list Visual Attribute size: "+listVisualAtt.size());
 
-        /* Debut de la mise à jour du matching entre les attributs de données avec les attributs visuels de la visualisation choisie */
+        /* Debut de la mise ï¿½ jour du matching entre les attributs de donnï¿½es avec les attributs visuels de la visualisation choisie */
         for(int index=0; index<listVisualAtt.size(); index++){
             Element  e = (Element) profil.getChild(listVisualAtt.get(index).getName());
             e = new Element(listVisualAtt.get(index).getName());
             profil.addContent(e);
 
-            /* Mise à jour de la partie des attributs de données numerique */
+            /* Mise ï¿½ jour de la partie des attributs de donnï¿½es numerique */
             if(listVisualAtt.get(index).getType().toString().equals(VRMXML.NUMERIC_TYPE_NAME)){
                 if(j<list_numerique.size()){
                     e.setText(list_numerique.get(j).getName_data());
                     j++;
-                /* réinitialiser l'indice j */
+                /* rï¿½initialiser l'indice j */
                 if(j>=list_numerique.size()){
                    j=0;
                 }
@@ -3282,7 +3107,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 if (j<list_texte.size()){
                     e.setText(list_texte.get(j).getName_data());
                     j++;
-                /* réinitialiser l'indice j */
+                /* rï¿½initialiser l'indice j */
                 if(j>=list_texte.size()){
                    j=0;
                 }
@@ -3354,7 +3179,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
         }
 
-        /* Fin de la mise à jour le matching entre les attributs de données avec les attributs visuels de la visualisation choisie */
+        /* Fin de la mise ï¿½ jour le matching entre les attributs de donnï¿½es avec les attributs visuels de la visualisation choisie */
 
         //AXES
         Element XRatio = (Element) profil.getChild("xRatio");
@@ -3599,24 +3424,24 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         HashMap<String, HashMap> MapAttributPalette = new HashMap<String, HashMap>();
         Iterator<String> itOverAttribut = MapAttributPalette.keySet().iterator();
         while (itOverAttribut.hasNext()) {
-            // On récupÃ¨re le nom de l'attribut
+            // On rï¿½cupÃ¨re le nom de l'attribut
             String nomAttribut = itOverAttribut.next();
-            // Ajout au schéma XML
+            // Ajout au schï¿½ma XML
             Element attribut = new Element(nomAttribut);
             colorParam.addContent(attribut);
             // On parcourt ensuite la palette
             HashMap<String, Color> mapValeurColor = MapAttributPalette.get(nomAttribut);
             Iterator<String> itOverValeur = mapValeurColor.keySet().iterator();
             while (itOverValeur.hasNext()) {
-                // On récupÃ¨re la valeur de l'attribut
+                // On rï¿½cupÃ¨re la valeur de l'attribut
                 String valeurAttribut = itOverValeur.next();
-                // et sa couleur associée
+                // et sa couleur associï¿½e
                 Color couleur = mapValeurColor.get(valeurAttribut);
-                // On créer l'élément XML correspondant
+                // On crï¿½er l'ï¿½lï¿½ment XML correspondant
                 Element colorAttribute = new Element("color");
                 colorAttribute.setAttribute("for", valeurAttribut);
                 colorAttribute.setText(couleur.getRed() + "," + couleur.getGreen() + "," + couleur.getBlue());
-                // On l'ajoute au schéma XML
+                // On l'ajoute au schï¿½ma XML
                 attribut.addContent(colorAttribute);
             }
         }
@@ -3633,12 +3458,12 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     public void MatchingResult() throws Exception {
         try{
         
-        //récuperer la description des attributs de données à partir de la partie structure du fichier XML chargé
+        //rï¿½cuperer la description des attributs de donnï¿½es ï¿½partir de la partie structure du fichier XML chargï¿½
         
         liste = new Matching().getListe(filePathName);
         DataAttribute_liste = liste;
         //System.out.println("Size of Data Attribute List : "+DataAttribute_liste.size());
-         //Calculer la norme canonique de U (poids des attributs de données)
+         //Calculer la norme canonique de U (poids des attributs de donnï¿½es)
         int somme = 0;
         somme = 0;
         int Norm_Can_DataAttribute = 0;
@@ -3657,22 +3482,22 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         }
         Norm_Can_VisualAttribute = (int) Math.sqrt(Norm_Can_VisualAttribute);
         
-        //trier les attributs de données selon leur type puis leur importance
+        //trier les attributs de donnï¿½es selon leur type puis leur importance
         liste = new Matching().getListeTri(liste);
 
-        //récuperer le matching attributs de données / attributs visuels
+        //rï¿½cuperer le matching attributs de donnï¿½es / attributs visuels
         MatchingTableModel = new Matching().getMatchingResult(liste, listdtm);
 
-        //initialiser le DefaultTableModel pour viusaliser le résultat du matching attributs de données / attributs visuels
+        //initialiser le DefaultTableModel pour viusaliser le rï¿½sultat du matching attributs de donnï¿½es / attributs visuels
         MatchingTableModelMEC = new DefaultTableModel(data, colNameDataSetMEC);
         
-        /*Initialiser la liste du matching attributs de données / attributs visuels pour dérouler l'alogorithme génétique*/
+        /*Initialiser la liste du matching attributs de donnï¿½es / attributs visuels pour dï¿½rouler l'alogorithme gï¿½nï¿½tique*/
         individuMEC = new ArrayList<Appariement>();
         for(int i=0; i<MatchingTableModel.getRowCount(); i++){
-        //Remplir le tableau Matching result qui traduit le résultat de la mise en correspondance
+        //Remplir le tableau Matching result qui traduit le rï¿½sultat de la mise en correspondance
         MatchingTableModelMEC.addRow(new Object[]{MatchingTableModel.getValueAt(i, 0).toString(), MatchingTableModel.getValueAt(i, 3).toString()});
         
-        //Créer et Remplir une liste de Matching result qui traduit le résultat de la mise en correspondance pour la passer en paramètre à l'Algo génétique
+        //Crï¿½er et Remplir une liste de Matching result qui traduit le rï¿½sultat de la mise en correspondance pour la passer en paramï¿½tre ï¿½ l'Algo gï¿½nï¿½tique
         Appariement indivMec = new Appariement();
         indivMec.setName_v_data(MatchingTableModel.getValueAt(i, 0).toString());
         indivMec.setType_v_data(MatchingTableModel.getValueAt(i, 1).toString());
@@ -3683,10 +3508,10 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
         individuMEC.add(indivMec);
         }
-        //afficher résultat du matching
+        //afficher rï¿½sultat du matching
         MatchingTable.setModel(MatchingTableModelMEC);
         
-        //Calculer le produit scalaire de V (poids des attributs visuels) et U (poids des attributs de données)
+        //Calculer le produit scalaire de V (poids des attributs visuels) et U (poids des attributs de donnï¿½es)
         somme = 0;
         similarite = 0;
         for(int i=0; i<individuMEC.size(); i++){
@@ -3694,10 +3519,10 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
             similarite = similarite+somme;
         }
 
-        //calcule de la similarité qui correspond au produit scalaire : Cos(u,v)= (u × v)/(?u?×?v?)    ? [0, 1
+        //calcule de la similaritï¿½ qui correspond au prduit scalaire : Cos(u,v)= (uï¿½ï¿½ v)/(?u?ï¿½?v?)    ? [0, 1
         similarite = (similarite/(Norm_Can_DataAttribute*Norm_Can_VisualAttribute))*100;
         
-        //Affeceter la similarité entre attributs de données et attributs visuels à ProgressBar
+        //Affeceter la similaritï¿½ entre attributs de donnï¿½es et attributs visuels ï¿½ ProgressBar
         TauxSimilarite.setValue((int) similarite);
         TauxSimilarite.setStringPainted(true);
 
@@ -3709,16 +3534,15 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     public List<Appariement> GenerateMatchingWithProfil(int indiceVisualisation) throws Exception {
 
-        //récuperer la description des attributs de données Ã  partir de la partie structure du fichier XML
+        //rï¿½cuperer la description des attributs de donnï¿½es Ã  partir de la partie structure du fichier XML
         List<Visualisation> dataAttributeliste = new Matching().getListe(filePathName);
-        //trier les attributs de données selon leur type puis leur importance
+        //trier les attributs de donnï¿½es selon leur type puis leur importance
         dataAttributeliste = new Matching().getListeTri(dataAttributeliste);
-        //récuperer les attributs visuels depuis la base de données pour chaque visualisation
-        // requete sql vers
+        //rï¿½cuperer les attributs visuels depuis la base de donnï¿½es pour chaque visualisation
         List<Visualisation> visualAttributeliste = new LoadVisualizations().getIdMethode(indiceVisualisation);
-        //récuperer le matching attributs de données / attributs visuels
+        //rï¿½cuperer le matching attributs de donnï¿½es / attributs visuels
         List<Appariement> resultaMEC = this.getMatching(dataAttributeliste, visualAttributeliste);
-        //initialiser le DefaultTableModel pour viusaliser le résultat du matching attributs de données / attributs visuels
+        //initialiser le DefaultTableModel pour viusaliser le rï¿½sultat du matching attributs de donnï¿½es / attributs visuels
         
         return resultaMEC;
         
@@ -3782,10 +3606,10 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
                 //Action executer lors du clique sur l'icone
                 ThumbnailAction thumbAction;
                 if(icon != null){
-                    //Dimension de l'icone (image) placer en bas de la fenetres (visualisations proposées par le systÃ¨me contenus dans la base de données
+                    //Dimension de l'icone (image) placer en bas de la fenetres (visualisations proposï¿½es par le systÃ¨me contenus dans la base de donnï¿½es
                     ImageIcon thumbnailIcon = new ImageIcon(getScaledImage(icon.getImage(), thumbnailIconDimension, thumbnailIconDimension));
                     ImageIcon OverviewIcon = new ImageIcon(getScaledImage(icon.getImage(), 130, 125));
-                    //paramétre affecté Ã  thumbAction
+                    //paramï¿½tre affectï¿½ Ã  thumbAction
                     thumbAction = new ThumbnailAction(OverviewIcon, thumbnailIcon, identif);
 
                 }else{
@@ -3880,7 +3704,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
          */
         public ThumbnailAction(Icon photo, Icon thumb, String desc){
             
-            //Dimension de l'icone (image) placer en bas de la fenetres (visualisations proposées par le systÃ¨me contenus dans la base de données
+            //Dimension de l'icone (image) placer en bas de la fenetres (visualisations proposï¿½es par le systÃ¨me contenus dans la base de donnï¿½es
             displayPhoto = photo;
             //displayPhoto = new ImageIcon(getScaledImage(photo.getImage(), 200, 200));
 
@@ -3951,177 +3775,62 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     }
 
     /**
-     * Methode pour la génération des visualisations avec le paramétrage recommandé par le système
-     * @param XMLFilepath chemin du fichier xml à visualiser 
+     * Methode pour la gï¿½nï¿½ration des visualisations avec le paramï¿½trage recommandï¿½ par le systï¿½me
+     * @param XMLFilepath chemin du fichier xml ï¿½ visualiser 
      * @throws Exception
      */
     private void AfficherIndividus(final String XMLFilepath) throws Exception {
 
         initialisationNuage3DEmpty();
-        initialisationNuage3D();
-        
-        visu3D1.ConfigurationNuage3D(XMLFilepath, "profil"+1);
-        visu3D1.createScene();
-        jScrollPaneVisu3D1.setViewportView(visu3D1.getCustomCanvas3D());
-//        JViewport view = jScrollPaneVisu3D1.getViewport();
-//
-//        Dimension size = view.getViewSize();
-//        Image capture = view.createImage(size.width, size.height);
-//
-//        Graphics captureG = capture.getGraphics();
-//        view.paint(captureG);
-//        FileOutputStream out = new FileOutputStream(file);
-//        BufferedImage image = null;
-//        image = (BufferedImage)capture;
-//        if (image != null) {
-//            JPEGImageEncoder encoder = JPEGCodec.createJPEGEncoder(out);
-//            JPEGEncodeParam param = encoder.getDefaultJPEGEncodeParam(image);
-//            param.setQuality(0.8f,true);
-//            encoder.encode(image, param);
-//            out.flush();
-//            out.close();
-//        }
-        visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,1);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D1.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+        initialisationNuage3D();    
+        initialisationVisu();
+        int pro = 0;
+        for(int j = 0; j< numMethode; j++){
+            pro++;
+            final int profil = pro;
+            System.out.println("Profil: "+ profil);
+            if (pro<numMethode){
+                listVisu3D.get(j).ConfigurationNuage3D(XMLFilepath, "profil"+pro);
+                listVisu3D.get(j).createScene();
+                //jScrollPaneVisu3D1.setViewportView(listVisu3D.get(j).getCustomCanvas3D());
+                listJScrollPaneVisu3D.get(j).setViewportView(listVisu3D.get(j).getCustomCanvas3D());
+                listVisu3D.get(j).addPointOfViewListener(listVisu3D.get(j).getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+                    @Override
+                    public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+                        updatePreview3D(filePathName,profil);//afficher le profil i : qui est passï¿½ en paramï¿½tre
+                    }
+                });
+                listVisu3D.get(j).getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+            }
+            if(pro == numMethode){
+                System.out.println(filePathName);
+                parallelDisplay = new ParallelDisplay();
+                listJScrollPaneVisu3D.get(j).setViewportView(null);
+                String urltext = "file:///" + filePathName;
+                XMLFile x = new XMLFile(new URL(urltext));
+                x.readXMLContents(filePathName);
+                parallelDisplay.setModel(x);
+                parallelDisplay.setMinimumSize(new Dimension(100,100));
+                parallelDisplay.setPreferredSize(new Dimension(120,100));
+                parallelDisplay.setMaximumSize(OverviewPictureContainer.getMaximumSize());
+                listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);
 
-        visu3D2.ConfigurationNuage3D(XMLFilepath, "profil"+9);
-        visu3D2.createScene();
-        jScrollPaneVisu3D2.setViewportView(visu3D2.getCustomCanvas3D());
-        visu3D2.addPointOfViewListener(visu3D2.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,9);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D2.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//                parallelDisplay.addMouseListener(new MouseAdapter() {
+//                    @Override
+//                    public void mousePressed(MouseEvent me) {
+//                           updatePreview3DForParallelCoordinate(filePathName,profil);//afficher le profil i : qui est passï¿½ en paramï¿½tre
+//                    }
+//                });
 
-        visu3D3.ConfigurationNuage3D(XMLFilepath, "profil"+2);
-        visu3D3.createScene();
-        jScrollPaneVisu3D3.setViewportView(visu3D3.getCustomCanvas3D());
-        visu3D3.addPointOfViewListener(visu3D3.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,2);//afficher le profil i : qui est passé en paramètre
+               }
         }
-        });
-        visu3D3.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D4.ConfigurationNuage3D(XMLFilepath, "profil"+8);
-        visu3D4.createScene();
-        jScrollPaneVisu3D4.setViewportView(visu3D4.getCustomCanvas3D());
-        visu3D4.addPointOfViewListener(visu3D4.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,8);//afficher le profil i : qui est passé en paramètre
-        }
-        
-        });
-        visu3D4.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D5.ConfigurationNuage3D(XMLFilepath, "profil"+3);
-        visu3D5.createScene();
-        jScrollPaneVisu3D5.setViewportView(visu3D5.getCustomCanvas3D());
-        visu3D5.addPointOfViewListener(visu3D5.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,3);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D5.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D6.ConfigurationNuage3D(XMLFilepath, "profil"+6);
-        visu3D6.createScene();
-        jScrollPaneVisu3D6.setViewportView(visu3D6.getCustomCanvas3D());
-        visu3D6.addPointOfViewListener(visu3D6.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,6);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D6.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D7.ConfigurationNuage3D(XMLFilepath, "profil"+4);
-        visu3D7.createScene();
-        jScrollPaneVisu3D7.setViewportView(visu3D7.getCustomCanvas3D());
-        visu3D7.addPointOfViewListener(visu3D7.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,4);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D7.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D8.ConfigurationNuage3D(XMLFilepath, "profil"+7);
-        visu3D8.createScene();
-        jScrollPaneVisu3D8.setViewportView(visu3D8.getCustomCanvas3D());
-        visu3D8.addPointOfViewListener(visu3D8.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,7);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D8.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D9.ConfigurationNuage3D(XMLFilepath, "profil"+5);
-        visu3D9.createScene();
-        jScrollPaneVisu3D9.setViewportView(visu3D9.getCustomCanvas3D());
-        visu3D9.addPointOfViewListener(visu3D9.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview3D(filePathName,5);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D9.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-               
+        //OverviewPictureContainer.setViewportView(parallelDisplay);
     }
 
-    public void saveImage(Component component, File destination){
-                // Creer a blank picture where each pixel is black
-		BufferedImage image = new BufferedImage(component.getWidth(), component.getHeight(), BufferedImage.TYPE_INT_RGB);
-
-		Graphics2D g2d = image.createGraphics();
-		component.paint(g2d);
-		g2d.dispose();
-
-		try {
-			ImageIO.write(image, "jpeg", destination);
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
     /**
-     * Obtenir une image à  partir d'une vue
-     */
-
-    public Image getImage(Component component){
-       if(component==null){return null;}
-       int width = 241;
-       int height = 241;
-       BufferedImage image = new BufferedImage(width, height, BufferedImage.TYPE_INT_RGB);
-       Graphics2D g = image.createGraphics();
-       component.paintAll(g);
-       //g.drawImage(source, 0, 0, width, height, null);
-       g.dispose();
-       return image;
-    }
-
-     private static Image scale(Image source, int width, int height) {
-        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
-        Graphics2D g = buf.createGraphics();
-        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
-        g.drawImage(source, 0, 0, width, height, null);
-        g.dispose();
-        return buf;
-    }
-    /**
-     * Methode pour la mise à jour de l'afichage de l'aperçu de la visualisation sélectionnée
-     * @param path adresse du fichier xml à visualiser  
-     * @param profil numéro du profil à afficher dans la partie supérieur de l'interface
+     * Methode pour la mise ï¿½ jour de l'afichage de l'aperï¿½u de la visualisation sï¿½lectionnï¿½e
+     * @param path adresse du fichier xml ï¿½ visualiser  
+     * @param profil numï¿½ro du profil ï¿½ afficher dans la partie supï¿½rieur de l'interface
      */
     private void updatePreview3D(String path, int profil){
 
@@ -4131,10 +3840,10 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Visualization_Name.setText("NUAGE 3D");
         GraphicElement_Name.setText(shape);
         listdtm = new LoadVisualizations().getIdMethode(profil);
-        /*  Chargement des descriptions ainsi que les identificateurs de tous les objectives utilisateurs contenues dans la base de données  */
+        /*  Chargement des descriptions ainsi que les identificateurs de tous les objectives utilisateurs contenues dans la base de donnï¿½es  */
         List<UserPreferences> dbuserObjectiveWeight = new LoadVisualizations().LoadUserObjectives();
         for(int i=0; i<listdtm.size();i++){
-        VisualAttributeTableModel.addRow(new Object[]{listdtm.get(i).getName(), listdtm.get(i).getType(), listdtm.get(i).getImportance()});
+            VisualAttributeTableModel.addRow(new Object[]{listdtm.get(i).getName(), listdtm.get(i).getType(), listdtm.get(i).getImportance()});
         }
         MatchingResult();
         Step3.setEnabled(true);
@@ -4157,75 +3866,58 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         OverviewPictureContainer.setViewportView(visu3D.getCustomCanvas3D());
         
     }
+     private void updatePreview3DForParallelCoordinate(String path, int profil){
+
+        try {
+            shape = new LoadVisualizations().getIdElement(profil);
+            VisualAttributeTableModel.setRowCount(0);
+            Visualization_Name.setText("Coordonnées Parallèles");
+            GraphicElement_Name.setText(shape);
+            listdtm = new LoadVisualizations().getIdMethode(profil);
+            /*  Chargement des descriptions ainsi que les identificateurs de tous les objectives utilisateurs contenues dans la base de donnï¿½es  */
+            List<UserPreferences> dbuserObjectiveWeight = new LoadVisualizations().LoadUserObjectives();
+            for(int i=0; i<listdtm.size();i++){
+                VisualAttributeTableModel.addRow(new Object[]{listdtm.get(i).getName(), listdtm.get(i).getType(), listdtm.get(i).getImportance()});
+             }
+            Step3.setEnabled(true);
+            AdjustIECButton.setEnabled(true);
+            LaunchVisualizations.setEnabled(true);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+        //ParallelDisplay parallelDisplay2 = parallelDisplay;
+        OverviewPictureContainer.setViewportView(parallelDisplay2.get);
+
+    }
     /**
-     * Methode pour l'initilisation des scènes 3D
+     * Methode pour l'initilisation des scï¿½nes 3D
      * @throws Exception
      */
-    private void initialisationNuage3D() throws Exception{
-
-        visu3D1 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D2 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D3 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D4 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D5 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D6 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D7 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D8 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D9 = new Visualisation_Nuage_3D(0, 0, 0);
-        
+    private void initialisationNuage3D() throws Exception{        
+        for (int i = 0; i<numMethode; i++)
+            listVisu3D.set(i,new Visualisation_Nuage_3D(0, 0, 0)); 
+    }
+    private void initialisationVisu(){
+        javax.swing.GroupLayout jPanelVisuLayout = new javax.swing.GroupLayout(jPanelVisu);
+        jPanelVisu.setLayout(jPanelVisuLayout);
+        DB_VisualizationToolBar.add(jPanelVisu);
+        for(int i = 0; i< numMethode; i++){            
+            JScrollPane  jScrollPaneVisu = new JScrollPane();
+            listJScrollPaneVisu3D.add(jScrollPaneVisu);
+            DB_VisualizationToolBar.add(listJScrollPaneVisu3D.get(i));
+         }
     }
 
     /**
-     * Methode utilisée pour le vidage de la mémoire et lancer le garbage collector
+     * Methode utilisï¿½e pour le vidage de la mï¿½moire et lancer le garbage collector
      * @throws Exception
      */
     private void initialisationNuage3DEmpty() throws Exception{
-
-        if(visu3D1!=null){
-            visu3D1.destroy();
-            visu3D1 = null;
-        }
-
-        if(visu3D2!=null){
-            visu3D2.destroy();
-            visu3D2 = null;
-        }
-
-        if(visu3D3!=null){
-            visu3D3.destroy();
-            visu3D3 = null;
-        }
-
-        if(visu3D4!=null){
-            visu3D4.destroy();
-            visu3D4 = null;
-        }
-
-        if(visu3D5!=null){
-            visu3D5.destroy();
-            visu3D5 = null;
-        }
-
-        if(visu3D6!=null){
-            visu3D6.destroy();
-            visu3D6 = null;
-        }
-
-        if(visu3D7!=null){
-            visu3D7.destroy();
-            visu3D7 = null;
-        }
-
-        if(visu3D8!=null){
-            visu3D8.destroy();
-            visu3D8 = null;
-        }
-
-        if(visu3D9!=null){
-            visu3D9.destroy();
-            visu3D9 = null;
-        }
-
+        for (int i =0; i<numMethode;i++)
+            if(listVisu3D.get(i) != null){
+                 listVisu3D.get(i).destroy();
+                 listVisu3D.set(i, null);
+            }       
     }
 
     private void ActionChooseMethod(int idmethode){
@@ -4233,7 +3925,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         try {
                 //creer la scene 3D
                 if(visu3D!=null){
-                Runtime r = Runtime.getRuntime(); // Créer un objet de type Runtime
+                Runtime r = Runtime.getRuntime(); // Crï¿½er un objet de type Runtime
                 //System.out.println ( "Max : " + r.maxMemory());
                 //System.out.println ( "Free : " + r.freeMemory());
                 r.gc(); // Appel implicite au garbage collector
@@ -4306,213 +3998,17 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     }
 
-    private void fillDefaultNuage3D() {
-
-        /*
-         * Initialisation des objets swings dans la partie configuration de la visualisation
-         * Déclaration des swings pour le Panel User Preferences
-         */
-
-//        size.setText("" + objSize.getValue());
-//        axisColor = new Color[3];
-//        axisColor[0] = new Color(0, 1f, 0);
-//        axisColor[1] = new Color(1f, 0, 0);
-//        axisColor[2] = new Color(0, 0, 1f);
-//        xColorView.setBackground(axisColor[0]);
-//        yColorView.setBackground(axisColor[1]);
-//        zColorView.setBackground(axisColor[2]);
-//
-//        xRatio.setValue(new Integer(1));
-//        yRatio.setValue(new Integer(1));
-//        zRatio.setValue(new Integer(1));
-//
-//        /*********** AXES ********************************/
-//        //xmlFile.parseData();
-//        //remplissage des param?tres possibles utilisables
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            xVar.addItem(xmlParser.getVectNumParam().get(i));
-//            yVar.addItem(xmlParser.getVectNumParam().get(i));
-//            zVar.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        /********* OBJECT 3D ************************/
-//        //remplissage des formes
-//        typeObj.addItem("CUBE_CHANEL v2");
-//        typeObj.addItem("CUBE_CHANEL v1");
-//        typeObj.addItem("CUBE");
-//        typeObj.addItem("FACE");
-//        typeObj.addItem("SPHERE");
-//
-//        float[] valCouleur = new float[xmlParser.getVectNumParam().size()];
-//
-//        //remplissage des param?tres possibles pour la classe
-//        //for(int i=0;i<xmlFile.getVectNumParam().size();i++)
-//        // classVar.addItem(xmlFile.getVectNumParam().get(i));
-//
-//        //remplissage des param?tres possibles pour l'attribut 1
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            attPyrHaut.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        //remplissage des param?tres possibles pour l'attribut 2
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            attPyrBas.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        //remplissage des param?tres possibles pour l'image
-//        imgAtt.addItem("Pas de texture");
-//        for (int i = 0; i < xmlParser.getVectPictParam().size(); i++) {
-//            imgAtt.addItem(xmlParser.getVectPictParam().get(i));
-//        }
-//
-//        //remplissage des param?tres possibles pour l'image
-//        for (int i = 0; i < xmlParser.getVectStrParam().size(); i++) {
-//            attMedia.addItem(xmlParser.getVectStrParam().get(i));
-//        }
-//
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            attSynthese.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        for (int i = xmlParser.getVectNumParam().size(); i < xmlParser.getVectStrParam().size(); i++) {
-//            attSynthese.addItem(xmlParser.getVectStrParam().get(i));
-//        }
-//
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            attClust.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        attTextHaut.addItem("Pas de texte");
-//        //remplissage des param?tres possibles pour l'attribut 3
-//        for (int i = 0; i < xmlParser.getVectStrParam().size(); i++) {
-//            attTextHaut.addItem(xmlParser.getVectStrParam().get(i));
-//        }
-//        attTextBas.addItem("Pas de texte");
-//        //remplissage des param?tres possibles pour l'attribut 4
-//        for (int i = 0; i < xmlParser.getVectStrParam().size(); i++) {
-//            attTextBas.addItem(xmlParser.getVectStrParam().get(i));
-//        }
-//
-//        // Couleurs Num
-//        for (int i = 0; i < xmlParser.getVectNumParam().size(); i++) {
-//            attCouleurHaut.addItem(xmlParser.getVectNumParam().get(i));
-//            attCouleurBas.addItem(xmlParser.getVectNumParam().get(i));
-//        }
-//
-//        // Couleurs Str
-//        for (int i = 0; i < xmlParser.getVectStrParam().size(); i++) {
-//            attCouleurHaut.addItem(xmlParser.getVectStrParam().get(i));
-//            attCouleurBas.addItem(xmlParser.getVectStrParam().get(i));
-//        }
-//        //d?finition de la couleur des objets
-//
-//        //d?finition de l'?chelle
-//        objSize.setValue(100);
-//        //imgAtt.setSelectedItem("images");
-//
-//        /********* CAMERA ***************************/
-//        //type de la cam?ra
-//        camType.addItem("Clavier et souris");
-//        camType.addItem("Marche");
-//        camType.addItem("SpacePilot mode Orbit");
-//        camType.addItem("SpacePilot mode Vol");
-//        camType.addItem("SpacePilot mode Examine");
-//        camType.addItem("Examine");
-//        camType.addItem("Wiimote Souris");
-//        //camType.addItem("Wiimote Reverse");
-//
-//        //position initiale de la cam?ra
-//        float xLoctemp = (Float.parseFloat(xRatio.getValue().toString())) * 2.5f;
-//        xLoc.setValue(xLoctemp);
-//        float yLoctemp = (Float.parseFloat(xRatio.getValue().toString())) * 2.5f;
-//        yLoc.setValue(yLoctemp);
-//        float zLoctemp = (Float.parseFloat(xRatio.getValue().toString())) * 2.5f;
-//        zLoc.setValue(zLoctemp);
-//
-//        imgAtt.setSelectedItem("fichier_photo");
-//        attClust.setSelectedItem("groupe");
-//
-//        jListMedia.setModel(model_list);
-//
-//
-//        /*************************************/
-//        //IMAGES
-//        BufferedImage imfond = null;
-//        imageIconFond = new ImageIcon();
-//        try {
-//            imfond = ImageIO.read(getClass().getResourceAsStream("/images/fond.jpg"));
-//            imfond = (BufferedImage) scale(imfond, 1500, 1300);
-//        } catch (Exception e) {
-//        }
-//        imageIconFond.setImage(imfond);
-//        jLabelBackground.setIcon(imageIconFond);
-//
-//        BufferedImage imPolytech = null;
-//        imageIconLogo = new ImageIcon();
-//        try {
-//            imPolytech = ImageIO.read(getClass().getResourceAsStream("/images/Logo.jpg"));
-//            imPolytech = (BufferedImage) scale(imPolytech, 148, 58);
-//        } catch (Exception e) {
-//        }
-//        imageIconLogo.setImage(imPolytech);
-//        jLabelPolytech.setIcon(imageIconLogo);
-//
-//
-//        BufferedImage imCeries = null;
-//        imageIconLogo1 = new ImageIcon();
-//        try {
-//            imCeries = ImageIO.read(getClass().getResourceAsStream("/images/ceries.PNG"));
-//            imCeries = (BufferedImage) scale(imCeries, 148, 58);
-//        } catch (Exception e) {
-//        }
-//        imageIconLogo1.setImage(imCeries);
-//        //jLabelCeries.setIcon(imageIconLogo1);
-//
-//        /************** Liens ************************/
-//        attLiens.addItem("");
-//        for (int i = 0; i < xmlParser.getVectLinkParam().size(); i++) {
-//            attLiens.addItem(xmlParser.getVectLinkParam().get(i));
-//        }
-
-
-        //Remplissage de listBox avec le nom de profils
-        initProfil();
-
-    }
-
     protected void fillNuage3DTab(String choixProfil) {
         xmlParser.RafraichissementFichier();
-    }
-
-    public void initProfil() {
-
-//        //Je renitialise pas ListBox
-//        model_list_profil.clear();
-//        String valIndex = xmlParser.getProfilDefaut().replace("profil", "");
-//        //Je recup?re le nombre de profil
-//        int nbrProfil = xmlParser.getNumberProfil();
-//
-//        for (int i = 0; i < nbrProfil; i++) {
-//            String valeur = xmlParser.getNomProfil("profil" + i);
-//            if (valeur.isEmpty() || xmlParser.getNumberProfil() < 1) {
-//                valeur = "profil par defaut";
-//            }
-//            if (i == Integer.parseInt(valIndex)) {
-//                jLabel_Profil.setText(valeur);
-//            }
-//            model_list_profil.add(i, valeur);
-//        }
-//
-//        jListProfil.setSelectedIndex(Integer.parseInt(valIndex));
     }
 
     public List getProfilList(String XMLpath) throws Exception{
         List list_profil = null;
         try{
         SAXBuilder sxb = new SAXBuilder();
-        //On crée un nouveau document JDOM avec en argument le fichier XML
+        //On crï¿½e un nouveau document JDOM avec en argument le fichier XML
         document = sxb.build(XMLpath);
-        //On initialise un nouvel élément racine avec l'élément racine du document.
+        //On initialise un nouvel ï¿½lï¿½ment racine avec l'ï¿½lï¿½ment racine du document.
         racine = document.getRootElement();
         Element visu = (Element) racine.getChild("visualizations");
         Element typeVisu = (Element) visu.getChild("nuage3D");
@@ -4553,7 +4049,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         Element visu = (Element) racine.getChild("geneticalgorithm");
         int x = 0;
         x = (visu.getChild("nuage3D").getContentSize()-2)-1;
-        /*récuperer tous les attributs visuels de CUBE_CHANEL v2 pour toutes les formes de nuages 3D */
+        /*rï¿½cuperer tous les attributs visuels de CUBE_CHANEL v2 pour toutes les formes de nuages 3D */
         listAttribute = new LoadVisualizations().getIdMethode(1);
         listdtm = new Matching().getListe(filePathName);
         listdtm = new Matching().getListeTri(listdtm);
@@ -4567,7 +4063,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         AddNewUserPofilSettingsGA(i, fichier, listAttribute, individuMEC, shape);
         //writeNewUserPofilSettings(x+i, "profil0", file, liste, individuMEC);
         enregistreFichier(filePathName);
-        //Creer un fichier xml pour les 5 méthodes de visualisation
+        //Creer un fichier xml pour les 5 mï¿½thodes de visualisation
         //enregistreFichier("Exemple"+filePathName);
         }
        // }
@@ -4578,7 +4074,14 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
 
     }
     
-   
+    private static Image scale(Image source, int width, int height) {
+        BufferedImage buf = new BufferedImage(width, height, BufferedImage.TYPE_INT_ARGB);
+        Graphics2D g = buf.createGraphics();
+        g.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BILINEAR);
+        g.drawImage(source, 0, 0, width, height, null);
+        g.dispose();
+        return buf;
+    }
 
     public String getBkgdColorView() {
         return "" + bkgdColorView.getBackground().getRGB();
@@ -4832,10 +4335,10 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         String SprofilDefaut = "profil0";
         SAXBuilder sxb = new SAXBuilder();
         racine = document.getRootElement();
-        //On crée un nouveau document JDOM avec en argument le fichier XML
+        //On crï¿½e un nouveau document JDOM avec en argument le fichier XML
         try{
         document = sxb.build(xml);
-        //On initialise un nouvel élément racine avec l'élément racine du document.
+        //On initialise un nouvel ï¿½lï¿½ment racine avec l'ï¿½lï¿½ment racine du document.
         racine = document.getRootElement();
 
         Element visualization = (Element) racine.getChild(VRMXML.VISUALIZATIONS_ELEMENT_NAME);
@@ -4854,8 +4357,8 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
         System.out.println("Number of all profil(s) :"+number);
 
         Element profilDefaut = (Element) Nuage3DVisualization.getChild("profilDefaut");
-        //On fait un test sur le profil selectionné par defaut Ã  l'ouverture du fichier xml
-        //s'il n'existe pas de profil par defaut on en créer un dans le fichier xml
+        //On fait un test sur le profil selectionnï¿½ par defaut Ã  l'ouverture du fichier xml
+        //s'il n'existe pas de profil par defaut on en crï¿½er un dans le fichier xml
         if (profilDefaut == null) {
             profilDefaut = new Element("profilDefaut");
             Nuage3DVisualization.addContent(profilDefaut);
@@ -4935,8 +4438,7 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JLabel Color5Label;
     private javax.swing.JButton Connexion;
     private javax.swing.JScrollPane DB_Visualisations_ScrollPane;
-    private javax.swing.JLabel DB_VisualizationLabel3D1;
-    private javax.swing.JPanel DB_VisualizationPanel;
+    private javax.swing.JToolBar DB_VisualizationToolBar;
     private javax.swing.JMenuItem DataSetDescriptionItem;
     private javax.swing.JLabel DataSetDescriptionLabel;
     private javax.swing.JLabel DataSetDescriptionLabel1;
@@ -5061,21 +4563,13 @@ private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRS
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JPanel jPanelVisu;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JScrollPane jScrollPane4;
     private javax.swing.JScrollPane jScrollPane5;
     private javax.swing.JScrollPane jScrollPane6;
     private javax.swing.JScrollPane jScrollPane8;
-    private javax.swing.JScrollPane jScrollPaneVisu3D1;
-    private javax.swing.JScrollPane jScrollPaneVisu3D2;
-    private javax.swing.JScrollPane jScrollPaneVisu3D3;
-    private javax.swing.JScrollPane jScrollPaneVisu3D4;
-    private javax.swing.JScrollPane jScrollPaneVisu3D5;
-    private javax.swing.JScrollPane jScrollPaneVisu3D6;
-    private javax.swing.JScrollPane jScrollPaneVisu3D7;
-    private javax.swing.JScrollPane jScrollPaneVisu3D8;
-    private javax.swing.JScrollPane jScrollPaneVisu3D9;
     private javax.swing.JPopupMenu.Separator jSeparator1;
     private javax.swing.JToolBar.Separator jSeparator5;
     private javax.swing.JSlider jSliderYeux;

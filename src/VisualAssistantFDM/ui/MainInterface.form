@@ -114,11 +114,10 @@
     <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
       <Color blue="ff" green="99" red="66" type="rgb"/>
     </Property>
-    <Property name="resizable" type="boolean" value="false"/>
   </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="menuBar" type="java.lang.String" value="jMenuBar1"/>
-    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,-29,0,0,5,93"/>
+    <SyntheticProperty name="formSize" type="java.awt.Dimension" value="-84,-19,0,5,115,114,0,18,106,97,118,97,46,97,119,116,46,68,105,109,101,110,115,105,111,110,65,-114,-39,-41,-84,95,68,20,2,0,2,73,0,6,104,101,105,103,104,116,73,0,5,119,105,100,116,104,120,112,0,0,3,118,0,0,4,-116"/>
     <SyntheticProperty name="formSizePolicy" type="int" value="0"/>
     <SyntheticProperty name="generateSize" type="boolean" value="true"/>
     <SyntheticProperty name="generateCenter" type="boolean" value="true"/>
@@ -144,19 +143,16 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="DataSetPanel" max="32767" attributes="1"/>
-                          <Group type="102" attributes="0">
-                              <EmptySpace min="10" pref="10" max="10" attributes="0"/>
-                              <Component id="UserPreferencePanel" max="32767" attributes="1"/>
-                          </Group>
+                          <Component id="UserPreferencePanel" alignment="0" pref="515" max="32767" attributes="1"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
+                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Group type="102" attributes="0">
-                              <Component id="DB_Visualisations_ScrollPane" pref="835" max="32767" attributes="2"/>
+                              <Component id="DB_Visualisations_ScrollPane" min="0" pref="0" max="32767" attributes="2"/>
                               <EmptySpace max="-2" attributes="0"/>
                               <Component id="jSeparator5" min="-2" max="-2" attributes="0"/>
                           </Group>
-                          <Component id="VisualizationPanel" alignment="0" pref="841" max="32767" attributes="2"/>
+                          <Component id="VisualizationPanel" alignment="0" pref="603" max="32767" attributes="2"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
@@ -172,13 +168,13 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
-          <Component id="statusBar" alignment="1" pref="1357" max="32767" attributes="0"/>
+          <Component id="statusBar" alignment="1" pref="1148" max="32767" attributes="0"/>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="filePath" min="-2" pref="124" max="-2" attributes="1"/>
               <EmptySpace max="-2" attributes="0"/>
               <Component id="filePathValue" min="-2" pref="969" max="-2" attributes="1"/>
-              <EmptySpace pref="248" max="32767" attributes="0"/>
+              <EmptySpace pref="39" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -196,12 +192,12 @@
                       <EmptySpace min="-2" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="0" attributes="0">
                           <Component id="jSeparator5" min="-2" pref="234" max="-2" attributes="0"/>
-                          <Component id="DB_Visualisations_ScrollPane" alignment="0" pref="276" max="32767" attributes="0"/>
+                          <Component id="DB_Visualisations_ScrollPane" alignment="0" pref="234" max="32767" attributes="0"/>
                       </Group>
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Component id="DataSetPanel" min="-2" max="-2" attributes="0"/>
-                      <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
                       <Component id="UserPreferencePanel" min="-2" pref="488" max="-2" attributes="0"/>
                   </Group>
               </Group>
@@ -251,9 +247,9 @@
                           <Group type="103" groupAlignment="1" attributes="0">
                               <Group type="102" attributes="0">
                                   <Component id="DataSetDescriptionLabel1" min="-2" max="-2" attributes="0"/>
-                                  <EmptySpace pref="126" max="32767" attributes="0"/>
+                                  <EmptySpace pref="151" max="32767" attributes="0"/>
                               </Group>
-                              <Component id="MatchingScrollPane" pref="212" max="32767" attributes="1"/>
+                              <Component id="MatchingScrollPane" pref="237" max="32767" attributes="1"/>
                           </Group>
                       </Group>
                       <Group type="102" alignment="0" attributes="0">
@@ -379,21 +375,21 @@
                   <Group type="103" groupAlignment="0" attributes="0">
                       <Group type="102" alignment="1" attributes="0">
                           <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                          <Component id="UserPreferencesButton" pref="128" max="32767" attributes="0"/>
+                          <Component id="UserPreferencesButton" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="LoadXMLData" pref="115" max="32767" attributes="0"/>
+                          <Component id="LoadXMLData" max="32767" attributes="0"/>
                           <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                          <Component id="AdjustIECButton" pref="184" max="32767" attributes="0"/>
+                          <Component id="AdjustIECButton" max="32767" attributes="0"/>
                           <EmptySpace min="-2" max="-2" attributes="0"/>
-                          <Component id="LaunchVisualizations" pref="168" max="32767" attributes="0"/>
+                          <Component id="LaunchVisualizations" max="32767" attributes="0"/>
                           <EmptySpace type="separate" min="-2" max="-2" attributes="0"/>
-                          <Component id="CloseButton" pref="144" max="32767" attributes="0"/>
+                          <Component id="CloseButton" max="32767" attributes="0"/>
                           <EmptySpace min="-2" pref="22" max="-2" attributes="0"/>
                       </Group>
                       <Group type="102" alignment="1" attributes="0">
                           <Group type="103" groupAlignment="1" attributes="0">
-                              <Component id="OverviewPictureContainer" alignment="0" pref="809" max="32767" attributes="0"/>
-                              <Component id="TauxSimilarite" alignment="0" pref="809" max="32767" attributes="0"/>
+                              <Component id="OverviewPictureContainer" alignment="0" pref="571" max="32767" attributes="0"/>
+                              <Component id="TauxSimilarite" alignment="0" pref="571" max="32767" attributes="0"/>
                           </Group>
                           <EmptySpace max="-2" attributes="0"/>
                       </Group>
@@ -649,9 +645,6 @@
                       <Properties>
                         <Property name="text" type="java.lang.String" value="Save"/>
                       </Properties>
-                      <Events>
-                        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton5ActionPerformed"/>
-                      </Events>
                       <Constraints>
                         <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
                           <AbsoluteConstraints x="345" y="257" width="78" height="-1"/>
@@ -2643,10 +2636,9 @@
             <TitledBorder title=" Suggested visualizations "/>
           </Border>
         </Property>
-        <Property name="verticalScrollBarPolicy" type="int" value="21"/>
         <Property name="autoscrolls" type="boolean" value="true"/>
         <Property name="preferredSize" type="java.awt.Dimension" editor="org.netbeans.beaninfo.editors.DimensionEditor">
-          <Dimension value="[3000, 310]"/>
+          <Dimension value="[1300, 310]"/>
         </Property>
       </Properties>
       <AuxValues>
@@ -2656,92 +2648,35 @@
 
       <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
       <SubComponents>
-        <Container class="javax.swing.JPanel" name="DB_VisualizationPanel">
+        <Container class="javax.swing.JToolBar" name="DB_VisualizationToolBar">
+          <Properties>
+            <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+              <Border info="null"/>
+            </Property>
+            <Property name="rollover" type="boolean" editor="org.netbeans.modules.form.RADConnectionPropertyEditor">
+              <Connection code="true" type="code"/>
+            </Property>
+          </Properties>
+          <AuxValues>
+            <AuxValue name="JavaCodeGenerator_SerializeTo" type="java.lang.String" value="IHM_Visual_Assistant_DB_VisualizationToolBar"/>
+          </AuxValues>
 
-          <Layout>
-            <DimensionLayout dim="0">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" alignment="0" attributes="0">
-                      <Component id="jScrollPaneVisu3D1" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D2" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D3" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D4" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D5" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D6" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D7" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D8" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Component id="jScrollPaneVisu3D9" min="-2" pref="241" max="-2" attributes="0"/>
-                      <EmptySpace min="-2" pref="14" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-            <DimensionLayout dim="1">
-              <Group type="103" groupAlignment="0" attributes="0">
-                  <Group type="102" attributes="0">
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Component id="jScrollPaneVisu3D1" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D2" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D3" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D4" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D5" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D6" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D7" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D8" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                          <Component id="jScrollPaneVisu3D9" alignment="0" min="-2" pref="241" max="-2" attributes="1"/>
-                      </Group>
-                      <EmptySpace min="-2" pref="59" max="-2" attributes="0"/>
-                  </Group>
-              </Group>
-            </DimensionLayout>
-          </Layout>
+          <Layout class="org.netbeans.modules.form.compat2.layouts.DesignBoxLayout"/>
           <SubComponents>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D1">
+            <Container class="javax.swing.JPanel" name="jPanelVisu">
 
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-              <SubComponents>
-                <Component class="javax.swing.JLabel" name="DB_VisualizationLabel3D1">
-                </Component>
-              </SubComponents>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D2">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D3">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D4">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D5">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D6">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D7">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D8">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
-            </Container>
-            <Container class="javax.swing.JScrollPane" name="jScrollPaneVisu3D9">
-
-              <Layout class="org.netbeans.modules.form.compat2.layouts.support.JScrollPaneSupportLayout"/>
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="585" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <EmptySpace min="0" pref="207" max="32767" attributes="0"/>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
             </Container>
           </SubComponents>
         </Container>
