@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.InetAddress;
+import java.net.MalformedURLException;
 import java.net.UnknownHostException;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
@@ -3804,6 +3805,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
             }
             if(pro == numMethode){
                 System.out.println(filePathName);
+//                listVisu3D.get(j).createScene();
                 parallelDisplay = new ParallelDisplay();
                 listJScrollPaneVisu3D.get(j).setViewportView(null);
                 String urltext = "file:///" + filePathName;
@@ -3813,15 +3815,14 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
                 parallelDisplay.setMinimumSize(new Dimension(100,100));
                 parallelDisplay.setPreferredSize(new Dimension(120,100));
                 parallelDisplay.setMaximumSize(OverviewPictureContainer.getMaximumSize());
-                listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);
 
-//                parallelDisplay.addMouseListener(new MouseAdapter() {
-//                    @Override
-//                    public void mousePressed(MouseEvent me) {
-//                           updatePreview3DForParallelCoordinate(filePathName,profil);//afficher le profil i : qui est passï¿½ en paramï¿½tre
-//                    }
-//                });
-
+                listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);               
+                parallelDisplay.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent me) {
+                             updatePreview3DForParallelCoordinate(filePathName, profil); //afficher le profil i : qui est passï¿½ en paramï¿½tre
+                    }
+                });
                }
         }
         //OverviewPictureContainer.setViewportView(parallelDisplay);
@@ -3866,9 +3867,10 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         OverviewPictureContainer.setViewportView(visu3D.getCustomCanvas3D());
         
     }
-     private void updatePreview3DForParallelCoordinate(String path, int profil){
+     private void updatePreview3DForParallelCoordinate(String path, int profil) {
 
         try {
+            System.out.println(filePathName);
             shape = new LoadVisualizations().getIdElement(profil);
             VisualAttributeTableModel.setRowCount(0);
             Visualization_Name.setText("Coordonnées Parallèles");
@@ -3879,15 +3881,16 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
             for(int i=0; i<listdtm.size();i++){
                 VisualAttributeTableModel.addRow(new Object[]{listdtm.get(i).getName(), listdtm.get(i).getType(), listdtm.get(i).getImportance()});
              }
+            MatchingResult();
             Step3.setEnabled(true);
             AdjustIECButton.setEnabled(true);
             LaunchVisualizations.setEnabled(true);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
-        //ParallelDisplay parallelDisplay2 = parallelDisplay;
-        OverviewPictureContainer.setViewportView(parallelDisplay2.get);
-
+        
+        OverviewPictureContainer.setViewportView(parallelDisplay);
+           
     }
     /**
      * Methode pour l'initilisation des scï¿½nes 3D
