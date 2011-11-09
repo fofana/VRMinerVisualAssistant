@@ -74,6 +74,7 @@ import VisualAssistantFDM.xml.VisuXMLReader;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.net.URL;
+import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
 import javax.swing.JProgressBar;
@@ -1782,7 +1783,7 @@ public class MainInterface extends javax.swing.JFrame {
             }
             //loading = new LoadingBox("Load & Display Data on real-time");
             //loading = new JProgressBar();
-            for(int j=1; j<=9; j++){
+            for(int j=1; j<=numMethode; j++){
             //Barre de progression pour la lecture:
             //getLoading();
             //getLoading().getProgressBar().setValue((int) (j / (float) (9) * 100));
@@ -2908,7 +2909,17 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
 
 
     }
+    public String getCurrentTypeVisu(int profil){
+        String methodeVisu = "";
+        try {
+            methodeVisu = new LoadVisualizations().getMethode(profil).get(0).getNom();
+        } catch (Exception ex) {
+            Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        String typeDeVisu = new StringTokenizer(methodeVisu, "_").nextToken();
+        return typeDeVisu;
 
+    }
     public void AddNewUserPofilSettingsGA(int indexProfil, File xml, List<Visualisation> listVisualAtt, List<Appariement> ResultMEC, String ElemGraph){
 
         SAXBuilder sxb = new SAXBuilder();
@@ -2917,6 +2928,10 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         float[] tabCoordMax;
         float[] tabCoordMinListe;
         float[] tabCoordMaxListe;
+        String typeDeVisu = getCurrentTypeVisu(indexProfil);
+        // Pour
+        if (typeDeVisu.equalsIgnoreCase("Nuage3D"))
+            typeDeVisu = "nuage3D";
         try {
         //On cr�e un nouveau document JDOM avec en argument le fichier XML
         document = sxb.build(xml);
@@ -3051,11 +3066,11 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
 
         //On cr�e une Liste contenant tous les noeuds "data" de l'Element racine
         Element visu = (Element) racine.getChild("geneticalgorithm");
-        Element typeVisu = (Element) visu.getChild("nuage3D");
+        Element typeVisu = (Element) visu.getChild(typeDeVisu);
         if (typeVisu == null) {
-            Element VisualizationName = new Element("nuage3D");
+            Element VisualizationName = new Element(typeDeVisu);
             visu.addContent(VisualizationName);
-            typeVisu = (Element) visu.getChild("nuage3D");
+            typeVisu = (Element) visu.getChild(typeDeVisu);
         }
         Element profilDefaut = (Element) typeVisu.getChild("profilDefaut");
         //On fait un test sur le profil selectionn� par defaut à l'ouverture du fichier xml
@@ -3183,267 +3198,277 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         /* Fin de la mise � jour le matching entre les attributs de donn�es avec les attributs visuels de la visualisation choisie */
 
         //AXES
-        Element XRatio = (Element) profil.getChild("xRatio");
-        Element YRatio = (Element) profil.getChild("yRatio");
-        Element ZRatio = (Element) profil.getChild("zRatio");
-        XRatio = new Element("xRatio");
-        YRatio = new Element("yRatio");
-        ZRatio = new Element("zRatio");
-        profil.addContent(XRatio);
-        profil.addContent(YRatio);
-        profil.addContent(ZRatio);
-        XRatio.setText(xRatio.getValue().toString());
-        YRatio.setText(yRatio.getValue().toString());
-        ZRatio.setText(zRatio.getValue().toString());
-        Element xColor = (Element) profil.getChild("xColor");
-        Element yColor = (Element) profil.getChild("yColor");
-        Element zColor = (Element) profil.getChild("zColor");
-        xColor = new Element("xColor");
-        yColor = new Element("yColor");
-        zColor = new Element("zColor");
-        profil.addContent(xColor);
-        profil.addContent(yColor);
-        profil.addContent(zColor);
-        xColor.setText(getXColorView());
-        yColor.setText(getYColorView());
-        zColor.setText(getZColorView());
-        //Ici on recupere la valeur min et la valeur max de xAxix, yAxix, zAxix
-        Element xMinVal = (Element) profil.getChild("xMinVal");
-        Element yMinVal = (Element) profil.getChild("yMinVal");
-        Element zMinVal = (Element) profil.getChild("zMinVal");
-        xMinVal = new Element("xMinVal");
-        yMinVal = new Element("yMinVal");
-        zMinVal = new Element("zMinVal");
-        profil.addContent(xMinVal);
-        profil.addContent(yMinVal);
-        profil.addContent(zMinVal);
-        xMinVal.setText(String.valueOf(tabCoordMin[0]));
-        yMinVal.setText(String.valueOf(tabCoordMin[1]));
-        zMinVal.setText(String.valueOf(tabCoordMin[2]));
+        if (typeDeVisu.equalsIgnoreCase("CoordonneesParalleles")) {
+            for (Appariement appariement : ResultMEC){
+                 Element  e = (Element) profil.getChild(appariement.getName_v_data());
+                 e = new Element(appariement.getName_v_data());
+                 profil.addContent(e);
+                 e.setText(appariement.getName_data());
+            }
+        }else
+         {
+            Element XRatio = (Element) profil.getChild("xRatio");
+            Element YRatio = (Element) profil.getChild("yRatio");
+            Element ZRatio = (Element) profil.getChild("zRatio");
+            XRatio = new Element("xRatio");
+            YRatio = new Element("yRatio");
+            ZRatio = new Element("zRatio");
+            profil.addContent(XRatio);
+            profil.addContent(YRatio);
+            profil.addContent(ZRatio);
+            XRatio.setText(xRatio.getValue().toString());
+            YRatio.setText(yRatio.getValue().toString());
+            ZRatio.setText(zRatio.getValue().toString());
+            Element xColor = (Element) profil.getChild("xColor");
+            Element yColor = (Element) profil.getChild("yColor");
+            Element zColor = (Element) profil.getChild("zColor");
+            xColor = new Element("xColor");
+            yColor = new Element("yColor");
+            zColor = new Element("zColor");
+            profil.addContent(xColor);
+            profil.addContent(yColor);
+            profil.addContent(zColor);
+            xColor.setText(getXColorView());
+            yColor.setText(getYColorView());
+            zColor.setText(getZColorView());
+            //Ici on recupere la valeur min et la valeur max de xAxix, yAxix, zAxix
+            Element xMinVal = (Element) profil.getChild("xMinVal");
+            Element yMinVal = (Element) profil.getChild("yMinVal");
+            Element zMinVal = (Element) profil.getChild("zMinVal");
+            xMinVal = new Element("xMinVal");
+            yMinVal = new Element("yMinVal");
+            zMinVal = new Element("zMinVal");
+            profil.addContent(xMinVal);
+            profil.addContent(yMinVal);
+            profil.addContent(zMinVal);
+            xMinVal.setText(String.valueOf(tabCoordMin[0]));
+            yMinVal.setText(String.valueOf(tabCoordMin[1]));
+            zMinVal.setText(String.valueOf(tabCoordMin[2]));
 
-        Element xMaxVal = (Element) profil.getChild("xMaxVal");
-        Element yMaxVal = (Element) profil.getChild("yMaxVal");
-        Element zMaxVal = (Element) profil.getChild("zMaxVal");
-        xMaxVal = new Element("xMaxVal");
-        yMaxVal = new Element("yMaxVal");
-        zMaxVal = new Element("zMaxVal");
-        profil.addContent(xMaxVal);
-        profil.addContent(yMaxVal);
-        profil.addContent(zMaxVal);
-        xMaxVal.setText(String.valueOf(tabCoordMax[0]));
-        yMaxVal.setText(String.valueOf(tabCoordMax[1]));
-        zMaxVal.setText(String.valueOf(tabCoordMax[2]));
+            Element xMaxVal = (Element) profil.getChild("xMaxVal");
+            Element yMaxVal = (Element) profil.getChild("yMaxVal");
+            Element zMaxVal = (Element) profil.getChild("zMaxVal");
+            xMaxVal = new Element("xMaxVal");
+            yMaxVal = new Element("yMaxVal");
+            zMaxVal = new Element("zMaxVal");
+            profil.addContent(xMaxVal);
+            profil.addContent(yMaxVal);
+            profil.addContent(zMaxVal);
+            xMaxVal.setText(String.valueOf(tabCoordMax[0]));
+            yMaxVal.setText(String.valueOf(tabCoordMax[1]));
+            zMaxVal.setText(String.valueOf(tabCoordMax[2]));
 
-        // liens
-        Element AfficherLiens = new Element("afficherLiens");
-        profil.addContent(AfficherLiens);
-        if(list_link.size()>0){
-        AfficherLiens.setText("true");
-        }else{
-        AfficherLiens.setText("false");    
-        }
-        
-        //OBJET 3D
-        Element Shape = (Element) profil.getChild("shape");
-        Element Size = (Element) profil.getChild("size");
-        Shape = new Element("shape");
-        Size = new Element("size");
-        profil.addContent(Shape);
-        profil.addContent(Size);
-        Shape.setText(ElemGraph);
-        Size.setText(size.getText().toString());
-        //Element attSynth = (Element) profil.getChild("attSynth");
-        Element Voix = (Element) profil.getChild("Voix");
-        Element listMedia = (Element) profil.getChild("listMedia");
-        //attSynth = new Element("attSynth");
-        Voix = new Element("Voix");
-        listMedia = new Element("listMedia");
-        //profil.addContent(attSynth);
-        profil.addContent(Voix);
-        profil.addContent(listMedia);
+            // liens
+            Element AfficherLiens = new Element("afficherLiens");
+            profil.addContent(AfficherLiens);
+            if(list_link.size()>0){
+            AfficherLiens.setText("true");
+            }else{
+            AfficherLiens.setText("false");
+            }
 
-        /*ChoicePanelXml choicePanel = new ChoicePanelXml();
-        ArrayList list_Media = choicePanel.getListMedia();
+            //OBJET 3D
+            Element Shape = (Element) profil.getChild("shape");
+            Element Size = (Element) profil.getChild("size");
+            Shape = new Element("shape");
+            Size = new Element("size");
+            profil.addContent(Shape);
+            profil.addContent(Size);
+            Shape.setText(ElemGraph);
+            Size.setText(size.getText().toString());
+            //Element attSynth = (Element) profil.getChild("attSynth");
+            Element Voix = (Element) profil.getChild("Voix");
+            Element listMedia = (Element) profil.getChild("listMedia");
+            //attSynth = new Element("attSynth");
+            Voix = new Element("Voix");
+            listMedia = new Element("listMedia");
+            //profil.addContent(attSynth);
+            profil.addContent(Voix);
+            profil.addContent(listMedia);
 
-        for (int i = 0; i < list_Media.size(); i++) {
-            Element Media = new Element("Media" + i);
-            listMedia.addContent(Media);
-            Media.setText(list_Media.get(i).toString());
-        }*/
+            /*ChoicePanelXml choicePanel = new ChoicePanelXml();
+            ArrayList list_Media = choicePanel.getListMedia();
 
-        //TO change here
-        //attSynth.setText("");
-        Voix.setText("Pas de voix");
+            for (int i = 0; i < list_Media.size(); i++) {
+                Element Media = new Element("Media" + i);
+                listMedia.addContent(Media);
+                Media.setText(list_Media.get(i).toString());
+            }*/
 
-        Element COlor1 = (Element) profil.getChild("Color1");
-        Element COlor2 = (Element) profil.getChild("Color2");
-        Element COlor3 = (Element) profil.getChild("Color3");
-        Element COlor4 = (Element) profil.getChild("Color4");
-        COlor1 = new Element("Color1");
-        COlor2 = new Element("Color2");
-        COlor3 = new Element("Color3");
-        COlor4 = new Element("Color4");
-        profil.addContent(COlor1);
-        profil.addContent(COlor2);
-        profil.addContent(COlor3);
-        profil.addContent(COlor4);
-        COlor1.setText(getColor1());
-        COlor2.setText(getColor2());
-        COlor3.setText(getColor3());
-        COlor4.setText(getColor4());
+            //TO change here
+            //attSynth.setText("");
+            Voix.setText("Pas de voix");
 
-        //CAMERA
-        Element camera = (Element) profil.getChild("camera");
-        camera = new Element("camera");
-        profil.addContent(camera);
-        camera.setText(getCamType());
+            Element COlor1 = (Element) profil.getChild("Color1");
+            Element COlor2 = (Element) profil.getChild("Color2");
+            Element COlor3 = (Element) profil.getChild("Color3");
+            Element COlor4 = (Element) profil.getChild("Color4");
+            COlor1 = new Element("Color1");
+            COlor2 = new Element("Color2");
+            COlor3 = new Element("Color3");
+            COlor4 = new Element("Color4");
+            profil.addContent(COlor1);
+            profil.addContent(COlor2);
+            profil.addContent(COlor3);
+            profil.addContent(COlor4);
+            COlor1.setText(getColor1());
+            COlor2.setText(getColor2());
+            COlor3.setText(getColor3());
+            COlor4.setText(getColor4());
 
-        Element XLoc = (Element) profil.getChild("xLoc");
-        Element YLoc = (Element) profil.getChild("yLoc");
-        Element ZLoc = (Element) profil.getChild("zLoc");
-        XLoc = new Element("xLoc");
-        YLoc = new Element("yLoc");
-        ZLoc = new Element("zLoc");
-        profil.addContent(XLoc);
-        profil.addContent(YLoc);
-        profil.addContent(ZLoc);
-        XLoc.setText(getxLoc());
-        YLoc.setText(getyLoc());
-        ZLoc.setText(getzLoc());
+            //CAMERA
+            Element camera = (Element) profil.getChild("camera");
+            camera = new Element("camera");
+            profil.addContent(camera);
+            camera.setText(getCamType());
 
-        //RESEAU
-        Element AdrsIpServer = (Element) profil.getChild("adrsIpServer");
-        Element Port = (Element) profil.getChild("port");
-        Element JCheckBoxReseau = (Element) profil.getChild("jCheckBoxReseau");
-        Element CheminLecteur = (Element) profil.getChild("cheminLecteur");
-        AdrsIpServer = new Element("adrsIpServer");
-        Port = new Element("port");
-        JCheckBoxReseau = new Element("jCheckBoxReseau");
-        CheminLecteur = new Element("cheminLecteur");
-        profil.addContent(AdrsIpServer);
-        profil.addContent(Port);
-        profil.addContent(JCheckBoxReseau);
-        profil.addContent(CheminLecteur);
+            Element XLoc = (Element) profil.getChild("xLoc");
+            Element YLoc = (Element) profil.getChild("yLoc");
+            Element ZLoc = (Element) profil.getChild("zLoc");
+            XLoc = new Element("xLoc");
+            YLoc = new Element("yLoc");
+            ZLoc = new Element("zLoc");
+            profil.addContent(XLoc);
+            profil.addContent(YLoc);
+            profil.addContent(ZLoc);
+            XLoc.setText(getxLoc());
+            YLoc.setText(getyLoc());
+            ZLoc.setText(getzLoc());
 
-        AdrsIpServer.setText(getadrsIpServer());
-        JCheckBoxReseau.setText(getjCheckBoxReseau());
-        CheminLecteur.setText(getcheminLecteur());
+            //RESEAU
+            Element AdrsIpServer = (Element) profil.getChild("adrsIpServer");
+            Element Port = (Element) profil.getChild("port");
+            Element JCheckBoxReseau = (Element) profil.getChild("jCheckBoxReseau");
+            Element CheminLecteur = (Element) profil.getChild("cheminLecteur");
+            AdrsIpServer = new Element("adrsIpServer");
+            Port = new Element("port");
+            JCheckBoxReseau = new Element("jCheckBoxReseau");
+            CheminLecteur = new Element("cheminLecteur");
+            profil.addContent(AdrsIpServer);
+            profil.addContent(Port);
+            profil.addContent(JCheckBoxReseau);
+            profil.addContent(CheminLecteur);
 
-        //ESPACE3D
-        Element JCheckBoxStereo = (Element) profil.getChild("jCheckBoxStereo");
-        Element JSliderYeux = (Element) profil.getChild("jSliderYeux");
-        Element JTextFieldTaille = (Element) profil.getChild("jTextFieldTaille");
-        Element JTextFieldDistance = (Element) profil.getChild("jTextFieldDistance");
-        Element BkgdColorView = (Element) profil.getChild("bkgdColorView");
-        Element GridEnabled = (Element) profil.getChild("gridEnabled");
-        Element GrilleTerrain = (Element) profil.getChild("grilleTerrain");
+            AdrsIpServer.setText(getadrsIpServer());
+            JCheckBoxReseau.setText(getjCheckBoxReseau());
+            CheminLecteur.setText(getcheminLecteur());
 
-        Element PopUpInfo = (Element) profil.getChild("popUpInfo");
-        Element COlor5 = (Element) profil.getChild("Color5");
-        Element ObjSize2 = (Element) profil.getChild("objSize2");
+            //ESPACE3D
+            Element JCheckBoxStereo = (Element) profil.getChild("jCheckBoxStereo");
+            Element JSliderYeux = (Element) profil.getChild("jSliderYeux");
+            Element JTextFieldTaille = (Element) profil.getChild("jTextFieldTaille");
+            Element JTextFieldDistance = (Element) profil.getChild("jTextFieldDistance");
+            Element BkgdColorView = (Element) profil.getChild("bkgdColorView");
+            Element GridEnabled = (Element) profil.getChild("gridEnabled");
+            Element GrilleTerrain = (Element) profil.getChild("grilleTerrain");
 
-        JCheckBoxStereo = new Element("jCheckBoxStereo");
-        JSliderYeux = new Element("jSliderYeux");
-        JTextFieldTaille = new Element("jTextFieldTaille");
-        JTextFieldDistance = new Element("jTextFieldDistance");
+            Element PopUpInfo = (Element) profil.getChild("popUpInfo");
+            Element COlor5 = (Element) profil.getChild("Color5");
+            Element ObjSize2 = (Element) profil.getChild("objSize2");
 
-        BkgdColorView = new Element("bkgdColorView");
-        GridEnabled = new Element("gridEnabled");
-        GrilleTerrain = new Element("grilleTerrain");
+            JCheckBoxStereo = new Element("jCheckBoxStereo");
+            JSliderYeux = new Element("jSliderYeux");
+            JTextFieldTaille = new Element("jTextFieldTaille");
+            JTextFieldDistance = new Element("jTextFieldDistance");
 
-        PopUpInfo = new Element("popUpInfo");
-        COlor5 = new Element("Color5");
-        ObjSize2 = new Element("objSize2");
-        profil.addContent(JCheckBoxStereo);
-        profil.addContent(JSliderYeux);
-        profil.addContent(JTextFieldTaille);
-        profil.addContent(JTextFieldDistance);
+            BkgdColorView = new Element("bkgdColorView");
+            GridEnabled = new Element("gridEnabled");
+            GrilleTerrain = new Element("grilleTerrain");
 
-        profil.addContent(BkgdColorView);
-        profil.addContent(GridEnabled);
-        profil.addContent(GrilleTerrain);
-        profil.addContent(PopUpInfo);
-        profil.addContent(COlor5);
-        profil.addContent(ObjSize2);
-        JCheckBoxStereo.setText(getjCheckBoxStereo());
-        JSliderYeux.setText(getjSliderYeux());
-        JTextFieldTaille.setText(getjTextFieldTaille());
-        JTextFieldDistance.setText(getjTextFieldDistance());
-        BkgdColorView.setText(getBkgdColorView());
-        GrilleTerrain.setText(getGrilleTerrain());
+            PopUpInfo = new Element("popUpInfo");
+            COlor5 = new Element("Color5");
+            ObjSize2 = new Element("objSize2");
+            profil.addContent(JCheckBoxStereo);
+            profil.addContent(JSliderYeux);
+            profil.addContent(JTextFieldTaille);
+            profil.addContent(JTextFieldDistance);
 
-        //GridEnabled.setText(getGridEnabled());
-        PopUpInfo.setText(getpopUpInfo());
-        COlor5.setText(getColor5());
-        ObjSize2.setText(getObjSize2());
+            profil.addContent(BkgdColorView);
+            profil.addContent(GridEnabled);
+            profil.addContent(GrilleTerrain);
+            profil.addContent(PopUpInfo);
+            profil.addContent(COlor5);
+            profil.addContent(ObjSize2);
+            JCheckBoxStereo.setText(getjCheckBoxStereo());
+            JSliderYeux.setText(getjSliderYeux());
+            JTextFieldTaille.setText(getjTextFieldTaille());
+            JTextFieldDistance.setText(getjTextFieldDistance());
+            BkgdColorView.setText(getBkgdColorView());
+            GrilleTerrain.setText(getGrilleTerrain());
 
-        //Clusturing
-        Element CLusturing = (Element) profil.getChild("Clusturing");
-        Element aTtClust = (Element) profil.getChild("attClust");
-        Element cLustFact = (Element) profil.getChild("clustFact");
-        Element CLustVisib = (Element) profil.getChild("ClustVisib");
-        Element cLustMethode = (Element) profil.getChild("clustMethode");
-        Element cLustObjet = (Element) profil.getChild("clustObjet");
-        Element EClairageSphere = (Element) profil.getChild("EclairageSphere");
-        Element oBjSize3 = (Element) profil.getChild("objSize3");
+            //GridEnabled.setText(getGridEnabled());
+            PopUpInfo.setText(getpopUpInfo());
+            COlor5.setText(getColor5());
+            ObjSize2.setText(getObjSize2());
 
-        CLusturing = new Element("Clusturing");
-        aTtClust = new Element("attClust");
-        cLustFact = new Element("clustFact");
-        CLustVisib = new Element("ClustVisib");
-        cLustMethode = new Element("clustMethode");
-        cLustObjet = new Element("clustObjet");
-        EClairageSphere = new Element("EclairageSphere");
-        oBjSize3 = new Element("objSize3");
+            //Clusturing
+            Element CLusturing = (Element) profil.getChild("Clusturing");
+            Element aTtClust = (Element) profil.getChild("attClust");
+            Element cLustFact = (Element) profil.getChild("clustFact");
+            Element CLustVisib = (Element) profil.getChild("ClustVisib");
+            Element cLustMethode = (Element) profil.getChild("clustMethode");
+            Element cLustObjet = (Element) profil.getChild("clustObjet");
+            Element EClairageSphere = (Element) profil.getChild("EclairageSphere");
+            Element oBjSize3 = (Element) profil.getChild("objSize3");
 
-        profil.addContent(CLusturing);
-        profil.addContent(aTtClust);
-        profil.addContent(cLustFact);
-        profil.addContent(CLustVisib);
-        profil.addContent(cLustMethode);
-        profil.addContent(cLustObjet);
-        profil.addContent(EClairageSphere);
-        profil.addContent(oBjSize3);
+            CLusturing = new Element("Clusturing");
+            aTtClust = new Element("attClust");
+            cLustFact = new Element("clustFact");
+            CLustVisib = new Element("ClustVisib");
+            cLustMethode = new Element("clustMethode");
+            cLustObjet = new Element("clustObjet");
+            EClairageSphere = new Element("EclairageSphere");
+            oBjSize3 = new Element("objSize3");
 
-        CLusturing.setText(getClusturing());
-//        if (!attClust.isEmpty()) {
-//            attClust.setSelectedItem(attClust);
-//        }
-        //aTtClust.setText(attClust.getSelectedItem().toString());
-        aTtClust.setText(getAttClust());
-        cLustFact.setText(getclustFact());
-        CLustVisib.setText(getClustVisib());
-        cLustMethode.setText(getclustMethode());
-        cLustObjet.setText(getclustObjet());
-        EClairageSphere.setText(getEclairageSphere());
-        oBjSize3.setText(getobjSize3());
+            profil.addContent(CLusturing);
+            profil.addContent(aTtClust);
+            profil.addContent(cLustFact);
+            profil.addContent(CLustVisib);
+            profil.addContent(cLustMethode);
+            profil.addContent(cLustObjet);
+            profil.addContent(EClairageSphere);
+            profil.addContent(oBjSize3);
 
-        // Palettes de couleurs
-        Element colorParam = new Element("colorParam");
-        profil.addContent(colorParam);
-        // On parcourt la liste des attributs
-        HashMap<String, HashMap> MapAttributPalette = new HashMap<String, HashMap>();
-        Iterator<String> itOverAttribut = MapAttributPalette.keySet().iterator();
-        while (itOverAttribut.hasNext()) {
-            // On r�cupère le nom de l'attribut
-            String nomAttribut = itOverAttribut.next();
-            // Ajout au sch�ma XML
-            Element attribut = new Element(nomAttribut);
-            colorParam.addContent(attribut);
-            // On parcourt ensuite la palette
-            HashMap<String, Color> mapValeurColor = MapAttributPalette.get(nomAttribut);
-            Iterator<String> itOverValeur = mapValeurColor.keySet().iterator();
-            while (itOverValeur.hasNext()) {
-                // On r�cupère la valeur de l'attribut
-                String valeurAttribut = itOverValeur.next();
-                // et sa couleur associ�e
-                Color couleur = mapValeurColor.get(valeurAttribut);
-                // On cr�er l'�l�ment XML correspondant
-                Element colorAttribute = new Element("color");
-                colorAttribute.setAttribute("for", valeurAttribut);
-                colorAttribute.setText(couleur.getRed() + "," + couleur.getGreen() + "," + couleur.getBlue());
-                // On l'ajoute au sch�ma XML
-                attribut.addContent(colorAttribute);
+            CLusturing.setText(getClusturing());
+    //        if (!attClust.isEmpty()) {
+    //            attClust.setSelectedItem(attClust);
+    //        }
+            //aTtClust.setText(attClust.getSelectedItem().toString());
+            aTtClust.setText(getAttClust());
+            cLustFact.setText(getclustFact());
+            CLustVisib.setText(getClustVisib());
+            cLustMethode.setText(getclustMethode());
+            cLustObjet.setText(getclustObjet());
+            EClairageSphere.setText(getEclairageSphere());
+            oBjSize3.setText(getobjSize3());
+
+            // Palettes de couleurs
+            Element colorParam = new Element("colorParam");
+            profil.addContent(colorParam);
+            // On parcourt la liste des attributs
+            HashMap<String, HashMap> MapAttributPalette = new HashMap<String, HashMap>();
+            Iterator<String> itOverAttribut = MapAttributPalette.keySet().iterator();
+            while (itOverAttribut.hasNext()) {
+                // On r�cupère le nom de l'attribut
+                String nomAttribut = itOverAttribut.next();
+                // Ajout au sch�ma XML
+                Element attribut = new Element(nomAttribut);
+                colorParam.addContent(attribut);
+                // On parcourt ensuite la palette
+                HashMap<String, Color> mapValeurColor = MapAttributPalette.get(nomAttribut);
+                Iterator<String> itOverValeur = mapValeurColor.keySet().iterator();
+                while (itOverValeur.hasNext()) {
+                    // On r�cupère la valeur de l'attribut
+                    String valeurAttribut = itOverValeur.next();
+                    // et sa couleur associ�e
+                    Color couleur = mapValeurColor.get(valeurAttribut);
+                    // On cr�er l'�l�ment XML correspondant
+                    Element colorAttribute = new Element("color");
+                    colorAttribute.setAttribute("for", valeurAttribut);
+                    colorAttribute.setText(couleur.getRed() + "," + couleur.getGreen() + "," + couleur.getBlue());
+                    // On l'ajoute au sch�ma XML
+                    attribut.addContent(colorAttribute);
+                }
             }
         }
     } catch (Exception e) {
@@ -3541,8 +3566,13 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         dataAttributeliste = new Matching().getListeTri(dataAttributeliste);
         //r�cuperer les attributs visuels depuis la base de donn�es pour chaque visualisation
         List<Visualisation> visualAttributeliste = new LoadVisualizations().getIdMethode(indiceVisualisation);
-        //r�cuperer le matching attributs de donn�es / attributs visuels
-        List<Appariement> resultaMEC = this.getMatching(dataAttributeliste, visualAttributeliste);
+
+        List<Appariement> resultaMEC;
+        if (getCurrentTypeVisu(indiceVisualisation).equalsIgnoreCase("CoordonneesParalleles"))
+            resultaMEC = this.getMatchingParalleleCoordinate(indiceVisualisation, dataAttributeliste, visualAttributeliste);
+        else
+            //r�cuperer le matching attributs de donn�es / attributs visuels
+            resultaMEC = this.getMatching(dataAttributeliste, visualAttributeliste);
         //initialiser le DefaultTableModel pour viusaliser le r�sultat du matching attributs de donn�es / attributs visuels
         
         return resultaMEC;
@@ -3550,25 +3580,53 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
     }
 
     public List<Appariement> getMatching(List<Visualisation> listeDataAttribute, List<Visualisation> listVisualAttribute) throws Exception{
-
         List<Appariement> MatchingListresult = new ArrayList<Appariement>();
         for(int i=0; i<listVisualAttribute.size(); i++){
             a : for(int j=0; j<listeDataAttribute.size(); j++){
-            if(listVisualAttribute.get(i).getType().toString().equals(listeDataAttribute.get(j).getType())){
-            Appariement listAppariement = new Appariement();
-            listAppariement.setName_v_data(listVisualAttribute.get(i).getName());
-            listAppariement.setType_v_data(listVisualAttribute.get(i).getType());
-            listAppariement.setImportance_v_data(listVisualAttribute.get(i).getImportance());
-            listAppariement.setName_data(listeDataAttribute.get(j).getName());
-            listAppariement.setType_data(listeDataAttribute.get(j).getType());
-            listAppariement.setImportance_data(listeDataAttribute.get(j).getImportance());
-            MatchingListresult.add(listAppariement);
-            listeDataAttribute.remove(j);
-            break a;
-            }
+                if(listVisualAttribute.get(i).getType().toString().equals(listeDataAttribute.get(j).getType())){
+                    Appariement listAppariement = new Appariement();
+                    listAppariement.setName_v_data(listVisualAttribute.get(i).getName());
+                    listAppariement.setType_v_data(listVisualAttribute.get(i).getType());
+                    listAppariement.setImportance_v_data(listVisualAttribute.get(i).getImportance());
+                    listAppariement.setName_data(listeDataAttribute.get(j).getName());
+                    listAppariement.setType_data(listeDataAttribute.get(j).getType());
+                    listAppariement.setImportance_data(listeDataAttribute.get(j).getImportance());
+                    MatchingListresult.add(listAppariement);
+                    listeDataAttribute.remove(j);
+                    break a;
+                }
             }
         }
 
+        return MatchingListresult;
+
+    }
+    public List<Appariement> getMatchingParalleleCoordinate(int profil, List<Visualisation> listeDataAttribute, List<Visualisation> listVisualAttribute) throws Exception{
+        int numAxes = 0;
+        for(Visualisation visu: listeDataAttribute)
+            if (visu.getType().equalsIgnoreCase(VRMXML.NUMERIC_TYPE_NAME))
+                numAxes++;
+        List<Appariement> MatchingListresult = new ArrayList<Appariement>();
+        for(int i=0; i<listVisualAttribute.size(); i++){
+              a : for(int j=0; j<listeDataAttribute.size(); j++){
+                if(listVisualAttribute.get(i).getType().toString().equals(listeDataAttribute.get(j).getType())){
+                    Appariement listAppariement = new Appariement();
+                    listAppariement.setName_v_data(listVisualAttribute.get(i).getName());
+                    listAppariement.setType_v_data(listVisualAttribute.get(i).getType());
+                    listAppariement.setImportance_v_data(listVisualAttribute.get(i).getImportance());
+                    listAppariement.setName_data(listeDataAttribute.get(j).getName());
+                    listAppariement.setType_data(listeDataAttribute.get(j).getType());
+                    listAppariement.setImportance_data(listeDataAttribute.get(j).getImportance());
+                    MatchingListresult.add(listAppariement);
+                    if(listVisualAttribute.get(i).getType().toString().equalsIgnoreCase(VRMXML.NUMERIC_TYPE_NAME) && numAxes != 0)
+                        numAxes--;
+                    else{                        
+                        break a;
+                    }
+                    //listeDataAttribute.remove(j);
+                }
+            }
+        }
         return MatchingListresult;
 
     }
@@ -3817,12 +3875,12 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
                 parallelDisplay.setMaximumSize(OverviewPictureContainer.getMaximumSize());
 
                 listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);               
-                parallelDisplay.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mousePressed(MouseEvent me) {
-                             updatePreview3DForParallelCoordinate(filePathName, profil); //afficher le profil i : qui est pass� en param�tre
-                    }
-                });
+//                parallelDisplay.addMouseListener(new MouseAdapter() {
+//                    @Override
+//                    public void mousePressed(MouseEvent me) {
+//                             updatePreview3DForParallelCoordinate(filePathName, profil); //afficher le profil i : qui est pass� en param�tre
+//                    }
+//                });
                }
         }
         //OverviewPictureContainer.setViewportView(parallelDisplay);
