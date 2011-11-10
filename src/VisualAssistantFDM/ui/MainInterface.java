@@ -3098,102 +3098,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
 
         System.out.println("list Visual Attribute size: "+listVisualAtt.size());
 
-        /* Debut de la mise � jour du matching entre les attributs de donn�es avec les attributs visuels de la visualisation choisie */
-        for(int index=0; index<listVisualAtt.size(); index++){
-            Element  e = (Element) profil.getChild(listVisualAtt.get(index).getName());
-            e = new Element(listVisualAtt.get(index).getName());
-            profil.addContent(e);
 
-            /* Mise � jour de la partie des attributs de donn�es numerique */
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.NUMERIC_TYPE_NAME)){
-                if(j<list_numerique.size()){
-                    e.setText(list_numerique.get(j).getName_data());
-                    j++;
-                /* r�initialiser l'indice j */
-                if(j>=list_numerique.size()){
-                   j=0;
-                }
-                }
-                else {
-                    j=0;
-                }
-            }
-
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.TEXT_TYPE_NAME)){
-                if (j<list_texte.size()){
-                    e.setText(list_texte.get(j).getName_data());
-                    j++;
-                /* r�initialiser l'indice j */
-                if(j>=list_texte.size()){
-                   j=0;
-                }
-                } else {
-                    j=0;
-                    e.setText("Pas de texte");
-                 }
-            }
-  
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.SYMBOLIC_TYPE_NAME)){
-                if(j<list_symbolique.size()){
-                    e.setText(list_symbolique.get(j).getName_data());
-                    j++;
-                    if(j>=list_symbolique.size()){
-                    j=0;
-                    }
-                 }
-                else {
-                    j=0;
-                }
-            }
-            
-
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.IMAGE_TYPE_NAME)) {
-                if(j<list_image.size()){
-                    e.setText(list_image.get(j).getName_data());
-                    j++;
-                } else {
-                    j=0;
-                    e.setText("Pas de texture");
-                 }
-             }
-            
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.SOUND_TYPE_NAME)) {
-                if(j<list_sound.size()){
-                    e.setText(list_sound.get(j).getName_data());
-                    j++;
-                } else {
-                    j=0;
-                 }
-            }
-
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.TEMPORAL_TYPE_NAME)) {
-                if(j<list_temporal.size()){
-                e.setText(list_temporal.get(j).getName_data());
-                j++;
-                } else {
-                    j=0;
-                 }
-            }
-
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.LINK_TYPE_NAME)) {
-                if(j<list_link.size()){
-                    e.setText(list_link.get(j).getName_data());
-                j++;
-                } else {
-                    j=0;
-                 }
-            }
-
-            if(listVisualAtt.get(index).getType().toString().equals(VRMXML.FILE_TYPE_NAME)) {
-                if(j<list_file.size()){
-                    e.setText(list_file.get(j).getName_data());
-                    j++;
-                } else {
-                    j=0;
-                 }
-            }
-
-        }
 
         /* Fin de la mise � jour le matching entre les attributs de donn�es avec les attributs visuels de la visualisation choisie */
 
@@ -3207,6 +3112,102 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
             }
         }else
          {
+                        /* Debut de la mise � jour du matching entre les attributs de donn�es avec les attributs visuels de la visualisation choisie */
+            for(int index=0; index<listVisualAtt.size(); index++){
+                Element  e = (Element) profil.getChild(listVisualAtt.get(index).getName());
+                e = new Element(listVisualAtt.get(index).getName());
+                profil.addContent(e);
+
+                /* Mise � jour de la partie des attributs de donn�es numerique */
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.NUMERIC_TYPE_NAME)){
+                    if(j<list_numerique.size()){
+                        e.setText(list_numerique.get(j).getName_data());
+                        j++;
+                    /* r�initialiser l'indice j */
+                    if(j>=list_numerique.size()){
+                       j=0;
+                    }
+                    }
+                    else {
+                        j=0;
+                    }
+                }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.TEXT_TYPE_NAME)){
+                    if (j<list_texte.size()){
+                        e.setText(list_texte.get(j).getName_data());
+                        j++;
+                    /* r�initialiser l'indice j */
+                    if(j>=list_texte.size()){
+                       j=0;
+                    }
+                    } else {
+                        j=0;
+                        e.setText("Pas de texte");
+                     }
+                }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.SYMBOLIC_TYPE_NAME)){
+                    if(j<list_symbolique.size()){
+                        e.setText(list_symbolique.get(j).getName_data());
+                        j++;
+                        if(j>=list_symbolique.size()){
+                        j=0;
+                        }
+                     }
+                    else {
+                        j=0;
+                    }
+                }
+
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.IMAGE_TYPE_NAME)) {
+                    if(j<list_image.size()){
+                        e.setText(list_image.get(j).getName_data());
+                        j++;
+                    } else {
+                        j=0;
+                        e.setText("Pas de texture");
+                     }
+                 }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.SOUND_TYPE_NAME)) {
+                    if(j<list_sound.size()){
+                        e.setText(list_sound.get(j).getName_data());
+                        j++;
+                    } else {
+                        j=0;
+                     }
+                }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.TEMPORAL_TYPE_NAME)) {
+                    if(j<list_temporal.size()){
+                    e.setText(list_temporal.get(j).getName_data());
+                    j++;
+                    } else {
+                        j=0;
+                     }
+                }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.LINK_TYPE_NAME)) {
+                    if(j<list_link.size()){
+                        e.setText(list_link.get(j).getName_data());
+                    j++;
+                    } else {
+                        j=0;
+                     }
+                }
+
+                if(listVisualAtt.get(index).getType().toString().equals(VRMXML.FILE_TYPE_NAME)) {
+                    if(j<list_file.size()){
+                        e.setText(list_file.get(j).getName_data());
+                        j++;
+                    } else {
+                        j=0;
+                     }
+                }
+
+            }
             Element XRatio = (Element) profil.getChild("xRatio");
             Element YRatio = (Element) profil.getChild("yRatio");
             Element ZRatio = (Element) profil.getChild("zRatio");
