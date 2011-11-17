@@ -71,12 +71,16 @@ import VisualAssistantFDM.xml.UpdateXMLFile;
 import visualassistantfacv.VRMinerVisualAssistant;
 import VisualAssistantFDM.visualisation.ui.Visualisation;
 import VisualAssistantFDM.xml.VisuXMLReader;
+import java.awt.BorderLayout;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseListener;
 import java.net.URL;
 import java.util.StringTokenizer;
 import java.util.prefs.Preferences;
 import javax.swing.JDialog;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JPanel;
 import javax.swing.JProgressBar;
 import vrminerlib.control.meta.NoneVRMMetaControlInfo;
 import vrminerlib.object3d.Object3D;
@@ -136,6 +140,9 @@ public class MainInterface extends javax.swing.JFrame {
     private int numMethode;
     private List<JScrollPane> listJScrollPaneVisu3D;
     private ParallelDisplay parallelDisplay;
+    ParallelDisplay  parallelDisplayOverview;
+    //LoadingProgressBar progressBar;
+    Thread progressThread;
     /**
      * Constructeur creates new form VRMinerVisualAssistant
      */
@@ -155,7 +162,8 @@ public class MainInterface extends javax.swing.JFrame {
         placeholderIcon = new MissingIcon();
         VisualisationsFilesNames = new ArrayList<PreView>();
         imageCaptions = new ArrayList<String>();
-        initComponents();
+        progressBar = new JProgressBar();
+        initComponents();       
         UserPreferencePanel.setVisible(false);
         DataSetPanel.setVisible(false);
         //DB_Visualisations_ScrollPane.setPreferredSize(new Dimension(500, 500));
@@ -177,7 +185,7 @@ public class MainInterface extends javax.swing.JFrame {
             Visualisation_Nuage_3D Visu = new Visualisation_Nuage_3D(0, 0, 0);
             listVisu3D.add(Visu);
         }
-        parallelDisplay = new ParallelDisplay();
+        parallelDisplay = new ParallelDisplay();       
     }
 
     /** This method is called from within the constructor to
@@ -377,8 +385,10 @@ public class MainInterface extends javax.swing.JFrame {
         Step3 = new javax.swing.JLabel();
         Step6 = new javax.swing.JLabel();
         filePath = new javax.swing.JLabel();
+        progressBar = new javax.swing.JProgressBar();
         filePathValue = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JToolBar.Separator();
+        labelTache = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         XLSLoadItem = new javax.swing.JMenuItem();
@@ -438,8 +448,8 @@ public class MainInterface extends javax.swing.JFrame {
                         .addGroup(DataSetPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(DataSetPanelLayout.createSequentialGroup()
                                 .addComponent(DataSetDescriptionLabel1)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 151, Short.MAX_VALUE))
-                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 237, Short.MAX_VALUE)))
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 243, Short.MAX_VALUE))
+                            .addComponent(MatchingScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 329, Short.MAX_VALUE)))
                     .addGroup(DataSetPanelLayout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(loadXLSfile, javax.swing.GroupLayout.PREFERRED_SIZE, 110, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -516,20 +526,20 @@ public class MainInterface extends javax.swing.JFrame {
                 .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGap(14, 14, 14)
-                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(UserPreferencesButton, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(LoadXMLData, javax.swing.GroupLayout.DEFAULT_SIZE, 99, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(AdjustIECButton, javax.swing.GroupLayout.DEFAULT_SIZE, 147, Short.MAX_VALUE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(LaunchVisualizations, javax.swing.GroupLayout.DEFAULT_SIZE, 141, Short.MAX_VALUE)
                         .addGap(18, 18, 18)
-                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(CloseButton, javax.swing.GroupLayout.DEFAULT_SIZE, 92, Short.MAX_VALUE)
                         .addGap(22, 22, 22))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, VisualizationPanelLayout.createSequentialGroup()
                         .addGroup(VisualizationPanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE)
-                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 571, Short.MAX_VALUE))
+                            .addComponent(OverviewPictureContainer, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE)
+                            .addComponent(TauxSimilarite, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 676, Short.MAX_VALUE))
                         .addContainerGap())))
         );
         VisualizationPanelLayout.setVerticalGroup(
@@ -1554,11 +1564,11 @@ public class MainInterface extends javax.swing.JFrame {
         jPanelVisu.setLayout(jPanelVisuLayout);
         jPanelVisuLayout.setHorizontalGroup(
             jPanelVisuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 585, Short.MAX_VALUE)
+            .addGap(0, 696, Short.MAX_VALUE)
         );
         jPanelVisuLayout.setVerticalGroup(
             jPanelVisuLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 207, Short.MAX_VALUE)
+            .addGap(0, 253, Short.MAX_VALUE)
         );
 
         DB_VisualizationToolBar.add(jPanelVisu);
@@ -1578,6 +1588,15 @@ public class MainInterface extends javax.swing.JFrame {
         Step6.setText("                                4. Close");
 
         filePath.setText("Path of Data Base : ");
+
+        progressBar.setForeground(new java.awt.Color(0, 255, 0));
+        progressBar.setOpaque(true);
+        progressBar.setStringPainted(true);
+        progressBar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
+            public void propertyChange(java.beans.PropertyChangeEvent evt) {
+                progressBarPropertyChange(evt);
+            }
+        });
 
         filePathValue.setForeground(new java.awt.Color(0, 51, 255));
 
@@ -1665,14 +1684,13 @@ public class MainInterface extends javax.swing.JFrame {
                         .addContainerGap()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(DataSetPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 515, Short.MAX_VALUE))
+                            .addComponent(UserPreferencePanel, javax.swing.GroupLayout.DEFAULT_SIZE, 607, Short.MAX_VALUE))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(DB_Visualisations_ScrollPane, 0, 0, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 603, Short.MAX_VALUE)))
+                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE)
+                            .addComponent(VisualizationPanel, javax.swing.GroupLayout.DEFAULT_SIZE, 708, Short.MAX_VALUE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(133, 133, 133)
                         .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -1683,13 +1701,19 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Step6)))
                 .addContainerGap())
-            .addComponent(statusBar, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, 1148, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(statusBar, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(labelTache, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filePathValue, javax.swing.GroupLayout.PREFERRED_SIZE, 969, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(39, Short.MAX_VALUE))
+                .addContainerGap(242, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1703,20 +1727,23 @@ public class MainInterface extends javax.swing.JFrame {
                         .addComponent(VisualizationPanel, javax.swing.GroupLayout.PREFERRED_SIZE, 580, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.DEFAULT_SIZE, 234, Short.MAX_VALUE)))
+                            .addComponent(DB_Visualisations_ScrollPane, javax.swing.GroupLayout.PREFERRED_SIZE, 280, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(jSeparator5, javax.swing.GroupLayout.PREFERRED_SIZE, 234, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(DataSetPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(UserPreferencePanel, javax.swing.GroupLayout.PREFERRED_SIZE, 488, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGap(0, 0, 0)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(Step6, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Step3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Step2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 0, 0)
-                .addComponent(statusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(labelTache, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         statusBar.setEnabled(false);
@@ -1724,7 +1751,7 @@ public class MainInterface extends javax.swing.JFrame {
         statusBar.setText("VRMinerVisualAssistant - V1.1 (Février 2011)");
 
         java.awt.Dimension screenSize = java.awt.Toolkit.getDefaultToolkit().getScreenSize();
-        setBounds((screenSize.width-1164)/2, (screenSize.height-886)/2, 1164, 886);
+        setBounds((screenSize.width-1367)/2, (screenSize.height-1011)/2, 1367, 1011);
     }// </editor-fold>//GEN-END:initComponents
 
     public ArrayList getTypeVisu() {
@@ -1781,20 +1808,43 @@ public class MainInterface extends javax.swing.JFrame {
             } catch (Exception ex) {
             Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
-            //loading = new LoadingBox("Load & Display Data on real-time");
-            //loading = new JProgressBar();
+            
+            progressBar.setBorderPainted(true);
+            progressBar.setMinimum(0);
+            progressBar.setMaximum(100);
+            //progressBar.setValue(0);
+            //progressBar.se
+            progressBar.setVisible(true);
+            progressBar.setStringPainted(true);
+////            //progressBar.
+//            progressThread= new Thread(new MonRunnable());
+//            progressThread.start();
+//            ProgressBarDemo progressBarDemo = new ProgressBarDemo();
+//            progressBarDemo.createAndShowGUI();
+            progressBar.setValue(0);
             for(int j=1; j<=numMethode; j++){
             //Barre de progression pour la lecture:
             //getLoading();
             //getLoading().getProgressBar().setValue((int) (j / (float) (9) * 100));
             //getLoading().setAction("Lecture des elements du profil" + j);
-                // get Appariement
+                int level = (j*100)/(numMethode+1);
+                //progressBar.setCurrentTask(shape);// + " " + level + "%" );
+                String methodeVisu = new LoadVisualizations().getMethode(j).get(0).getNom();
+                labelTache.setText(methodeVisu);
+                 // get Appariement
                 List<Appariement> individuResultatMEC = GenerateMatchingWithProfil(j);
                 shape = new LoadVisualizations().getIdElement(j);
                 AddNewUserPofilSettingsGA(j, fichier, listViusaAttribute, individuResultatMEC, shape);
                 enregistreFichier(filePathName);
+
+                progressBar.setValue(level);
+
             }
+             progressBar.setValue(50);
+            int level = ((numMethode+1)*100)/(numMethode+1);
+            labelTache.setText(" Affichage de individus");// + level + "%" );
             AfficherIndividus(filePathName);
+            progressBar.setValue(level);
             Step2.setEnabled(true);
             //loadimages.execute();
             }
@@ -1805,8 +1855,40 @@ public class MainInterface extends javax.swing.JFrame {
             
         }
     }//GEN-LAST:event_LoadXMLDataActionPerformed
-    
-    public LoadingBox getLoading() {
+
+        /*public class MonRunnable implements Runnable
+        {
+            public void run()
+            {
+            try {
+                List<Visualisation> listViusaAttribute = new LoadVisualizations().getIdMethode(1);
+                File fichier = new File(filePathName);
+                for (int j = 1; j <= numMethode; j++) {
+                    progressBar.setProgressBarValue(j);
+                    try {
+                        //Barre de progression pour la lecture:
+                        //getLoading();
+                        //getLoading().getProgressBar().setValue((int) (j / (float) (9) * 100));
+                        //getLoading().setAction("Lecture des elements du profil" + j);
+                        progressBar.setCurrentTask(shape);
+                        // get Appariement
+                        List<Appariement> individuResultatMEC = GenerateMatchingWithProfil(j);
+                        shape = new LoadVisualizations().getIdElement(j);
+                        AddNewUserPofilSettingsGA(j, fichier, listViusaAttribute, individuResultatMEC, shape);
+                        enregistreFichier(filePathName);
+                        progressBar.setProgressBarValue((j * 100) / numMethode);                        
+                    } catch (Exception ex) {
+                        Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                    progressBar.dispose();
+                }                
+            } catch (Exception ex) {
+                Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            }
+        }
+   */
+         public LoadingBox getLoading() {
         if (loading == null) {
             loading = new LoadingBox("Chargement ...", 0, 100);
         }
@@ -2398,6 +2480,16 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
             
         }
 }//GEN-LAST:event_UserPreferencesButtonActionPerformed
+
+private void progressBarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_progressBarPropertyChange
+    // TODO add your handling code here:
+    if ("progress" == evt.getPropertyName()) {
+            int progress = (Integer) evt.getNewValue();
+            progressBar.setValue(progress);
+//            taskOutput.append(String.format(
+//                    "Completed %d%% of task.\n", task.getProgress()));
+        }
+}//GEN-LAST:event_progressBarPropertyChange
 
     public void AddNewUserPofilSettings(int indexProfil, File xml, List<Visualisation> listVisualAtt, List<Appariement> ResultMEC, String ElemGraph){
 
@@ -3078,6 +3170,7 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
 
         if (profilDefaut == null) {
             profilDefaut = new Element("profilDefaut");
+           if (!typeDeVisu.equalsIgnoreCase("CoordonneesParalleles"))
             typeVisu.addContent(profilDefaut);
         }
 
@@ -3103,13 +3196,27 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         /* Fin de la mise ï¿½ jour le matching entre les attributs de donnï¿½es avec les attributs visuels de la visualisation choisie */
 
         //AXES
+        List lll = typeVisu.getContent();
+       // System.out.println(typeVisu.getChildren("Axis"+1).size());
         if (typeDeVisu.equalsIgnoreCase("CoordonneesParalleles")) {
-            for (Appariement appariement : ResultMEC){
-                 Element  e = (Element) profil.getChild(appariement.getName_v_data());
-                 e = new Element(appariement.getName_v_data());
-                 profil.addContent(e);
-                 e.setText(appariement.getName_data());
+//            int i = 0;
+            for (int i = 0; i < ResultMEC.size()-1; i++) {
+                Element  e = (Element) profil.getChild(ResultMEC.get(i).getName_v_data()+(i+1));
+                e = new Element(ResultMEC.get(i).getName_v_data()+(i+1));
+                profil.addContent(e);
+                e.setText(ResultMEC.get(i).getName_data());
             }
+            Element  e = (Element) profil.getChild(ResultMEC.get(ResultMEC.size()-1).getName_v_data());
+            e = new Element(ResultMEC.get(ResultMEC.size()-1).getName_v_data());
+            profil.addContent(e);
+            e.setText(ResultMEC.get(ResultMEC.size()-1).getName_data());
+//            for (Appariement appariement : ResultMEC){
+//                 Element  e = (Element) profil.getChild(appariement.getName_v_data());
+//                 e = new Element(appariement.getName_v_data());
+//                 profil.addContent(e);
+//                 e.setText(appariement.getName_data());
+//                 //i++;
+//            }
         }else
          {
                         /* Debut de la mise ï¿½ jour du matching entre les attributs de donnï¿½es avec les attributs visuels de la visualisation choisie */
@@ -3876,12 +3983,12 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
                 parallelDisplay.setMaximumSize(OverviewPictureContainer.getMaximumSize());
 
                 listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);               
-//                parallelDisplay.addMouseListener(new MouseAdapter() {
-//                    @Override
-//                    public void mousePressed(MouseEvent me) {
-//                             updatePreview3DForParallelCoordinate(filePathName, profil); //afficher le profil i : qui est passï¿½ en paramï¿½tre
-//                    }
-//                });
+                parallelDisplay.addMouseListener(new MouseAdapter() {
+                    @Override
+                    public void mousePressed(MouseEvent me) {
+                             updatePreview3DForParallelCoordinate(filePathName, profil); //afficher le profil i : qui est passï¿½ en paramï¿½tre
+                    }
+                });
                }
         }
         //OverviewPictureContainer.setViewportView(parallelDisplay);
@@ -3947,8 +4054,25 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         } catch (Exception ex) {
             ex.printStackTrace();
         }
+        System.out.println(filePathName);
+//      listVisu3D.get(j).createScene();
+        parallelDisplayOverview = new ParallelDisplay();
+        String urltext = "file:///" + filePathName;
+        XMLFile x;
+        try {
+            x = new XMLFile(new URL(urltext));
+            x.readXMLContents(filePathName);
+            parallelDisplayOverview.setModel(x);
+            parallelDisplayOverview.setMinimumSize(new Dimension(100,100));
+            parallelDisplayOverview.setPreferredSize(new Dimension(120,100));
+            parallelDisplayOverview.setMaximumSize(OverviewPictureContainer.getMaximumSize());
+//
+                OverviewPictureContainer.setViewportView(parallelDisplayOverview);
+        } catch (Exception ex) {
+            Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
+        }
         
-        OverviewPictureContainer.setViewportView(parallelDisplay);
+       
            
     }
     /**
@@ -4644,12 +4768,14 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
     private javax.swing.JLabel jTextFieldTailleLabel;
     private javax.swing.JLabel jTextFieldTailleLabelMesure;
     private javax.swing.JButton jToggleButton1;
+    private javax.swing.JLabel labelTache;
     private javax.swing.JButton loadXLSfile;
     private javax.swing.JSlider objSize;
     private javax.swing.JSlider objSize2;
     private javax.swing.JSlider objSize3;
     private javax.swing.JLabel objSize3Label;
     private javax.swing.JCheckBox popUpInfo;
+    private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel size;
     private javax.swing.JLabel size1;
     private javax.swing.JLabel size1Label;
