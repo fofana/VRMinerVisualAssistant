@@ -166,14 +166,6 @@
               </Group>
               <EmptySpace min="-2" max="-2" attributes="0"/>
           </Group>
-          <Group type="102" alignment="1" attributes="0">
-              <Component id="statusBar" min="-2" pref="603" max="-2" attributes="0"/>
-              <EmptySpace max="-2" attributes="0"/>
-              <Component id="labelTache" pref="221" max="32767" attributes="0"/>
-              <EmptySpace type="unrelated" max="-2" attributes="0"/>
-              <Component id="progressBar" min="-2" pref="497" max="-2" attributes="0"/>
-              <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
-          </Group>
           <Group type="102" alignment="0" attributes="0">
               <EmptySpace max="-2" attributes="0"/>
               <Component id="filePath" min="-2" pref="124" max="-2" attributes="1"/>
@@ -181,6 +173,7 @@
               <Component id="filePathValue" min="-2" pref="969" max="-2" attributes="1"/>
               <EmptySpace pref="242" max="32767" attributes="0"/>
           </Group>
+          <Component id="statusBar" alignment="0" pref="1351" max="32767" attributes="0"/>
       </Group>
     </DimensionLayout>
     <DimensionLayout dim="1">
@@ -214,11 +207,7 @@
                   <Component id="Step1" alignment="2" min="-2" pref="27" max="-2" attributes="1"/>
               </Group>
               <EmptySpace max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="1" max="-2" attributes="0">
-                  <Component id="statusBar" alignment="1" max="32767" attributes="1"/>
-                  <Component id="progressBar" alignment="1" min="-2" max="-2" attributes="1"/>
-                  <Component id="labelTache" alignment="1" max="32767" attributes="1"/>
-              </Group>
+              <Component id="statusBar" min="-2" max="-2" attributes="1"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -513,6 +502,9 @@
           <Properties>
             <Property name="text" type="java.lang.String" value="Update Visualization Preferences"/>
           </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="AdjustPrefencesButtonActionPerformed"/>
+          </Events>
           <Constraints>
             <Constraint layoutClass="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout" value="org.netbeans.modules.form.compat2.layouts.DesignAbsoluteLayout$AbsoluteConstraintsDescription">
               <AbsoluteConstraints x="130" y="450" width="220" height="-1"/>
@@ -2730,18 +2722,6 @@
         <Property name="text" type="java.lang.String" value="Path of Data Base : "/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JProgressBar" name="progressBar">
-      <Properties>
-        <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
-          <Color blue="0" green="ff" red="0" type="rgb"/>
-        </Property>
-        <Property name="opaque" type="boolean" value="true"/>
-        <Property name="stringPainted" type="boolean" value="true"/>
-      </Properties>
-      <Events>
-        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="progressBarPropertyChange"/>
-      </Events>
-    </Component>
     <Component class="javax.swing.JLabel" name="filePathValue">
       <Properties>
         <Property name="foreground" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
@@ -2750,8 +2730,6 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JToolBar$Separator" name="jSeparator5">
-    </Component>
-    <Component class="javax.swing.JLabel" name="labelTache">
     </Component>
   </SubComponents>
 </Form>

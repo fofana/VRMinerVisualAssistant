@@ -79,5 +79,6 @@ public class NUAGE3D {
     public static String COLOR_PARAM_NAME = "colorParam";
     public static String COLOR_CLASS_NAME = "Classe";
     public static String COLOR_NAME = "color";
+    public static String PARALLELCOORDINATE_NAME="CoordonneesParalleles";
 
 }

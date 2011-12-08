@@ -20,7 +20,7 @@ import org.jdom.Element;
 import org.jdom.input.SAXBuilder;
 import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
-import visualisation3d.xml.NUAGE3D;
+import VisualAssistantFDM.xml.NUAGE3D;
 import vrminerlib.io.VRMXML;
 import vrminerlib.io.VRMXMLReader;
 import vrminerlib.utils.MessageBox;
@@ -207,7 +207,7 @@ public class XMLUpdater {
 
         if (profilDefaut == null) {
             profilDefaut = new Element("profilDefaut");
-           if (!typeDeVisu.equalsIgnoreCase("CoordonneesParalleles"))
+           if (!typeDeVisu.equalsIgnoreCase(NUAGE3D.PARALLELCOORDINATE_NAME))
             typeVisu.addContent(profilDefaut);
         }
 
@@ -235,7 +235,7 @@ public class XMLUpdater {
         //AXES
         List lll = typeVisu.getContent();
        // System.out.println(typeVisu.getChildren("Axis"+1).size());
-        if (typeDeVisu.equalsIgnoreCase("CoordonneesParalleles")) {
+        if (typeDeVisu.equalsIgnoreCase(NUAGE3D.PARALLELCOORDINATE_NAME)) {
 //            int i = 0;
             for (int i = 0; i < ResultMEC.size()-1; i++) {
                 Element  e = (Element) profil.getChild(ResultMEC.get(i).getName_v_data()+(i+1));
@@ -695,6 +695,10 @@ public class XMLUpdater {
    }
    
    public void enregistreFichier(String fichier) throws Exception{
+         if (document == null){
+            SAXBuilder sxb = new SAXBuilder();
+            document = sxb.build(fichier);
+         }
          XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
          sortie.output(document, new FileOutputStream(fichier));
 

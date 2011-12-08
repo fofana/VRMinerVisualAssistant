@@ -45,7 +45,7 @@ import org.jdom.output.Format;
 import org.jdom.output.XMLOutputter;
 import visualisation3d.ui.Filtre;
 import visualisation3d.vrmNuage3D.Visualisation_Nuage_3D;
-import visualisation3d.xml.NUAGE3D;
+import VisualAssistantFDM.xml.NUAGE3D;
 import visualisation3d.xml.Nuage3DVisuXMLReader;
 import vrminerlib.core.VRMinerFramework;
 import vrminerlib.io.ExcelToXMLWriter;
@@ -141,6 +141,7 @@ public class MainInterface extends javax.swing.JFrame {
     private ParallelDisplay parallelDisplay;
     ParallelDisplay  parallelDisplayOverview;
     private File xmlFile;
+    private int currentPreview = -1;
     //LoadingProgressBar progressBar;
     Thread progressThread;
     //XMLUpdater xMLUpdater;
@@ -163,7 +164,7 @@ public class MainInterface extends javax.swing.JFrame {
         placeholderIcon = new MissingIcon();
         VisualisationsFilesNames = new ArrayList<PreView>();
         imageCaptions = new ArrayList<String>();
-        progressBar = new JProgressBar();
+        //progressBar = new JProgressBar();
         initComponents();       
         UserPreferencePanel.setVisible(false);
         DataSetPanel.setVisible(false);
@@ -386,10 +387,8 @@ public class MainInterface extends javax.swing.JFrame {
         Step3 = new javax.swing.JLabel();
         Step6 = new javax.swing.JLabel();
         filePath = new javax.swing.JLabel();
-        progressBar = new javax.swing.JProgressBar();
         filePathValue = new javax.swing.JLabel();
         jSeparator5 = new javax.swing.JToolBar.Separator();
-        labelTache = new javax.swing.JLabel();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         XLSLoadItem = new javax.swing.JMenuItem();
@@ -567,6 +566,11 @@ public class MainInterface extends javax.swing.JFrame {
         UserPreferencePanel.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         AdjustPrefencesButton.setText("Update Visualization Preferences");
+        AdjustPrefencesButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AdjustPrefencesButtonActionPerformed(evt);
+            }
+        });
         UserPreferencePanel.add(AdjustPrefencesButton, new org.netbeans.lib.awtextra.AbsoluteConstraints(130, 450, 220, -1));
 
         VisualizationDescriptionPanel.setBorder(javax.swing.BorderFactory.createTitledBorder("Visualization Description"));
@@ -1590,15 +1594,6 @@ public class MainInterface extends javax.swing.JFrame {
 
         filePath.setText("Path of Data Base : ");
 
-        progressBar.setForeground(new java.awt.Color(0, 255, 0));
-        progressBar.setOpaque(true);
-        progressBar.setStringPainted(true);
-        progressBar.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-            public void propertyChange(java.beans.PropertyChangeEvent evt) {
-                progressBarPropertyChange(evt);
-            }
-        });
-
         filePathValue.setForeground(new java.awt.Color(0, 51, 255));
 
         jMenu1.setText("File");
@@ -1702,19 +1697,13 @@ public class MainInterface extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(Step6)))
                 .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(statusBar, javax.swing.GroupLayout.PREFERRED_SIZE, 603, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(labelTache, javax.swing.GroupLayout.DEFAULT_SIZE, 221, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, 497, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(16, 16, 16))
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(filePath, javax.swing.GroupLayout.PREFERRED_SIZE, 124, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(filePathValue, javax.swing.GroupLayout.PREFERRED_SIZE, 969, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(242, Short.MAX_VALUE))
+            .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, 1351, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1741,10 +1730,7 @@ public class MainInterface extends javax.swing.JFrame {
                     .addComponent(Step2, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(Step1, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(statusBar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(progressBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(labelTache, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addComponent(statusBar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         statusBar.setEnabled(false);
@@ -1814,19 +1800,19 @@ public class MainInterface extends javax.swing.JFrame {
             Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
             }
             //XMLUpdater xMLUpdater = new XMLUpdater(this) ;
-            progressBar.setBorderPainted(true);
-            progressBar.setMinimum(0);
-            progressBar.setMaximum(100);
-            //progressBar.setValue(0);
-            //progressBar.se
-            progressBar.setVisible(true);
-            progressBar.setStringPainted(true);
-////            //progressBar.
-//            progressThread= new Thread(new MonRunnable());
-//            progressThread.start();
-//            ProgressBarDemo progressBarDemo = new ProgressBarDemo();
-//            progressBarDemo.createAndShowGUI();
-            progressBar.setValue(0);
+//            progressBar.setBorderPainted(true);
+//            progressBar.setMinimum(0);
+//            progressBar.setMaximum(100);
+//            //progressBar.setValue(0);
+//            //progressBar.se
+//            progressBar.setVisible(false);
+//            progressBar.setStringPainted(true);
+//////            //progressBar.
+////            progressThread= new Thread(new MonRunnable());
+////            progressThread.start();
+////            ProgressBarDemo progressBarDemo = new ProgressBarDemo();
+////            progressBarDemo.createAndShowGUI();
+//            progressBar.setValue(0);
             for(int j=1; j<=numMethode; j++){
             //Barre de progression pour la lecture:
             //getLoading();
@@ -1835,22 +1821,22 @@ public class MainInterface extends javax.swing.JFrame {
                 int level = (j*100)/(numMethode+1);
                 //progressBar.setCurrentTask(shape);// + " " + level + "%" );
                 String methodeVisu = new LoadVisualizations().getMethode(j).get(0).getNom();
-                labelTache.setText(methodeVisu);
+                //labelTache.setText(methodeVisu);
                  // get Appariement
                 List<Appariement> individuResultatMEC = new Utils(this).GenerateMatchingWithProfil(j);
                 shape = new LoadVisualizations().getIdElement(j);
                 new XMLUpdater(this).AddNewUserPofilSettingsGA(j, fichier, listViusaAttribute, individuResultatMEC, shape);                
-                progressBar.setValue(level);
+                //progressBar.setValue(level);
 
             }
-             progressBar.setValue(50);
+             //progressBar.setValue(50);
             int level = ((numMethode+1)*100)/(numMethode+1);
-            labelTache.setText(" Affichage de individus");// + level + "%" );
+            //labelTache.setText(" Affichage de individus");// + level + "%" );
             AfficherIndividus(filePathName);
-            progressBar.setValue(level);
+            //progressBar.setValue(level);
             Step2.setEnabled(true);
             //loadimages.execute();
-            showUserObjectivesDialog();
+            //showUserObjectivesDialog();
             }
             catch(Exception ex){
                 JOptionPane.showMessageDialog(null, "erreur Loading XML File : " + ex.getMessage());
@@ -1875,7 +1861,15 @@ public class MainInterface extends javax.swing.JFrame {
            addProfils();
            liste = new Matching().getListe(filePathName);
            liste = new Matching().getListeTri(liste);
-           listAttribute = new LoadVisualizations().getIdMethode(1);
+           String methodeVisu = new Utils(this).getCurrentTypeVisu(currentPreview);
+           if (!methodeVisu.equalsIgnoreCase(NUAGE3D.PARALLELCOORDINATE_NAME))
+               listAttribute = new LoadVisualizations().getIdMethode(1);
+           else{
+               List<Visualisation> list = new LoadVisualizations().getIdMethode(currentPreview);
+               Visualisation axis = list.get(0);
+
+
+           }
            initialisationNuage3DEmpty();
            new IGAInterface(individuMEC, filePathName, liste, listAttribute, shape, listNormalisation).setVisible(true);
            this.setVisible(false);
@@ -2449,15 +2443,9 @@ private void UserPreferencesButtonActionPerformed(java.awt.event.ActionEvent evt
         }
 }//GEN-LAST:event_UserPreferencesButtonActionPerformed
 
-private void progressBarPropertyChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_progressBarPropertyChange
+private void AdjustPrefencesButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AdjustPrefencesButtonActionPerformed
     // TODO add your handling code here:
-    if ("progress" == evt.getPropertyName()) {
-            int progress = (Integer) evt.getNewValue();
-            progressBar.setValue(progress);
-//            taskOutput.append(String.format(
-//                    "Completed %d%% of task.\n", task.getProgress()));
-        }
-}//GEN-LAST:event_progressBarPropertyChange
+}//GEN-LAST:event_AdjustPrefencesButtonActionPerformed
 
 public void showUserObjectivesDialog(){
     dialog.setVisible(true);
@@ -2544,7 +2532,9 @@ public void showUserObjectivesDialog(){
     }
 
    
-
+    public Document getDocument(){
+        return document;
+    }
  
     
     public List<String> getCaption(){
@@ -2763,7 +2753,7 @@ public void showUserObjectivesDialog(){
                 listJScrollPaneVisu3D.get(j).setViewportView(listVisu3D.get(j).getCustomCanvas3D());
                 listVisu3D.get(j).addPointOfViewListener(listVisu3D.get(j).getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
                     @Override
-                    public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+                    public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){                        
                         updatePreview3D(filePathName,profil);//afficher le profil i : qui est pass� en param�tre
                     }
                 });
@@ -2778,9 +2768,10 @@ public void showUserObjectivesDialog(){
                 XMLFile x = new XMLFile(new URL(urltext));
                 x.readXMLContents(filePathName);
                 parallelDisplay.setModel(x);
-                parallelDisplay.setMinimumSize(new Dimension(5,5));
-                parallelDisplay.setPreferredSize(new Dimension(5,5));
+                parallelDisplay.setMinimumSize(new Dimension(25,25));
+                parallelDisplay.setPreferredSize(new Dimension(25,25));
                 parallelDisplay.setMaximumSize(OverviewPictureContainer.getMaximumSize());
+                parallelDisplay.lineInfo.setVisible(false);
 
                 listJScrollPaneVisu3D.get(j).setViewportView(parallelDisplay);               
                 parallelDisplay.addMouseListener(new MouseAdapter() {
@@ -2800,7 +2791,7 @@ public void showUserObjectivesDialog(){
      * @param profil num�ro du profil � afficher dans la partie sup�rieur de l'interface
      */
     private void updatePreview3D(String path, int profil){
-
+        currentPreview = profil;
         try {
         shape = new LoadVisualizations().getIdElement(profil);
         VisualAttributeTableModel.setRowCount(0);
@@ -2826,7 +2817,8 @@ public void showUserObjectivesDialog(){
         visu3D.destroy();
         visu3D = null;
         }
-
+        parallelDisplay.setMinimumSize(new Dimension(100,80));
+        parallelDisplay.setPreferredSize(new Dimension(100,80));
         visu3D = new Visualisation_Nuage_3D(0, 0, 0);
         visu3D.ConfigurationNuage3D(path, "profil"+profil);
         visu3D.createScene();
@@ -2834,7 +2826,7 @@ public void showUserObjectivesDialog(){
         
     }
      private void updatePreview3DForParallelCoordinate(String path, int profil) {
-
+        currentPreview = profil;
         try {
             System.out.println(filePathName);
             shape = new LoadVisualizations().getIdElement(profil);
@@ -2862,14 +2854,16 @@ public void showUserObjectivesDialog(){
         try {
             x = new XMLFile(new URL(urltext));
             x.readXMLContents(filePathName);
-            parallelDisplayOverview.setModel(x);
-            parallelDisplayOverview.setMinimumSize(new Dimension(100,100));
-            parallelDisplayOverview.setPreferredSize(new Dimension(120,100));
             parallelDisplay.setMinimumSize(new Dimension(100,80));
             parallelDisplay.setPreferredSize(new Dimension(100,80));
+            
+            parallelDisplayOverview.setModel(x);
+            parallelDisplayOverview.setMinimumSize(new Dimension(100,100));
+            parallelDisplayOverview.setPreferredSize(new Dimension(120,100));            
+            parallelDisplayOverview.lineInfo.setVisible(true);
             parallelDisplayOverview.setMaximumSize(OverviewPictureContainer.getMaximumSize());
-//
-                OverviewPictureContainer.setViewportView(parallelDisplayOverview);
+            OverviewPictureContainer.setViewportView(parallelDisplayOverview);
+            
         } catch (Exception ex) {
             Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -3011,13 +3005,13 @@ public void showUserObjectivesDialog(){
             } catch (Exception ex) {
             Logger.getLogger(MainInterface.class.getName()).log(Level.SEVERE, null, ex);
         }
-        for(int i=0; i<8; i++){
-        //AddNewUserPofilSettings(i, fichier, listAttribute, individuMEC, shape);
-        new XMLUpdater(this).AddNewUserPofilSettingsGA(i, fichier, listAttribute, individuMEC, shape);
-        //writeNewUserPofilSettings(x+i, "profil0", file, liste, individuMEC);
-        new XMLUpdater(this).enregistreFichier(filePathName);
-        //Creer un fichier xml pour les 5 m�thodes de visualisation
-        //enregistreFichier("Exemple"+filePathName);
+        for(int i=1; i<9; i++){
+            //AddNewUserPofilSettings(i, fichier, listAttribute, individuMEC, shape);
+            new XMLUpdater(this).AddNewUserPofilSettingsGA(i, fichier, listAttribute, individuMEC, shape);
+            //writeNewUserPofilSettings(x+i, "profil0", file, liste, individuMEC);
+            new XMLUpdater(this).enregistreFichier(filePathName);
+            //Creer un fichier xml pour les 5 m�thodes de visualisation
+            //enregistreFichier("Exemple"+filePathName);
         }
        // }
         }
@@ -3485,14 +3479,12 @@ public void showUserObjectivesDialog(){
     private javax.swing.JLabel jTextFieldTailleLabel;
     private javax.swing.JLabel jTextFieldTailleLabelMesure;
     private javax.swing.JButton jToggleButton1;
-    private javax.swing.JLabel labelTache;
     private javax.swing.JButton loadXLSfile;
     private javax.swing.JSlider objSize;
     private javax.swing.JSlider objSize2;
     private javax.swing.JSlider objSize3;
     private javax.swing.JLabel objSize3Label;
     private javax.swing.JCheckBox popUpInfo;
-    private javax.swing.JProgressBar progressBar;
     private javax.swing.JLabel size;
     private javax.swing.JLabel size1;
     private javax.swing.JLabel size1Label;

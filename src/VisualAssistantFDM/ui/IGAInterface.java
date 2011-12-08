@@ -52,10 +52,18 @@ import vrminerlib.scene.PointOfViewMouseAdapter;
  * @author Abdelheq
  */
 public class IGAInterface extends javax.swing.JFrame {
+    private List<Visualisation_Nuage_3D> listVisu3D;
+    private List<javax.swing.JScrollPane> listJScrollPaneVisu3D;
+    private int numVisu = 8;
 
     /** Creates new form VRMinerVisualAssistant_IGA */
     public IGAInterface(List<Appariement> MatchingResult, String filePathName, List<Visualisation> DataAttributeList, List<Visualisation> VisualAttributeList, String ElemGraph, List<Normalisation> NormalisationVector) throws Exception{
-        
+        listVisu3D = new ArrayList<Visualisation_Nuage_3D>();
+        listJScrollPaneVisu3D = new ArrayList<javax.swing.JScrollPane>();
+        for (int i = 0; i<numVisu; i++){
+            Visualisation_Nuage_3D Visu = new Visualisation_Nuage_3D(0, 0, 0);
+            listVisu3D.add(Visu);
+        }
         /* Nom de la méthode de visualisation (Element graphique de base ex. NUAGE3D_CUBE) */
         MethodeName = ElemGraph;
 
@@ -94,10 +102,15 @@ public class IGAInterface extends javax.swing.JFrame {
 
         /* Affectation du résultat de la mise en correspondance de l'étape précédante */
         NewMatchingIndividualResult = MatchingResult;
-        for(int i =0; i<8; i++){
-          ReadXMLFileGA(XMLfilepathName, i);
-          UpdateElement_InitialPopulation(Individual_Size, InitialPopulation, i, list_Numerique_DataAttribute_Normalisation);
-          enregistreFichier(filePathName);
+        try {
+            for(int i =1; i<9; i++){ // Changer de 0-8  àen 1-9
+              ReadXMLFileGA(XMLfilepathName, i);
+              UpdateElement_InitialPopulation(Individual_Size, InitialPopulation, i, list_Numerique_DataAttribute_Normalisation);
+              enregistreFichier(filePathName);
+            }
+        }
+        catch(Exception e){
+            System.out.println("Exception ");
         }
         initComponents();
         Step5.setEnabled(false);
@@ -351,7 +364,7 @@ panel6.add(scrollpane6, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, 
         .addGroup(panel8Layout.createSequentialGroup()
             .addComponent(scrollpane8, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(CheckBox8, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
+            .addComponent(CheckBox8, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
     );
 
     //visu3D8 = new Visualisation_Nuage_3D(0, 0, 0);
@@ -388,7 +401,7 @@ CheckBox7.addItemListener(new java.awt.event.ItemListener() {
         .addGroup(panel7Layout.createSequentialGroup()
             .addComponent(scrollpane7, javax.swing.GroupLayout.PREFERRED_SIZE, 250, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-            .addComponent(CheckBox7, javax.swing.GroupLayout.DEFAULT_SIZE, 26, Short.MAX_VALUE))
+            .addComponent(CheckBox7, javax.swing.GroupLayout.DEFAULT_SIZE, 27, Short.MAX_VALUE))
     );
 
     //visu3D7 = new Visualisation_Nuage_3D(0, 0, 0);
@@ -526,7 +539,7 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
             .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addGap(10, 10, 10)
             .addComponent(panel2, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
+            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
             .addComponent(panel3, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
             .addComponent(panel4, javax.swing.GroupLayout.PREFERRED_SIZE, 320, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -808,54 +821,68 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
     }//GEN-LAST:event_WeightSizeStateChanged
 
     private void initialisationNuage3DEmpty() throws Exception{
-          
-        if(visu3D1!=null){
-            visu3D1.destroy();
-            visu3D1 = null;
-        }
-        if(visu3D2!=null){
-            visu3D2.destroy();
-            visu3D2 = null;
-        }
-        if(visu3D3!=null){
-            visu3D3.destroy();
-            visu3D3 = null;
-        }
-        if(visu3D4!=null){
-            visu3D4.destroy();
-            visu3D4 = null;
-        }
-        if(visu3D5!=null){
-            visu3D5.destroy();
-            visu3D5 = null;
-        }
-        if(visu3D6!=null){
-            visu3D6.destroy();
-            visu3D6 = null;
-        }
-        if(visu3D7!=null){
-            visu3D7.destroy();
-            visu3D7 = null;
-        }
-        if(visu3D8!=null){
-            visu3D8.destroy();
-            visu3D8 = null;
-        }
-
+        for (int i =0; i<numVisu;i++)
+            if(listVisu3D.get(i) != null){
+                 listVisu3D.get(i).destroy();
+                 listVisu3D.set(i, null);
+            }
     }
-
+//    private void initialisationNuage3DEmpty() throws Exception{
+//
+//        if(visu3D1!=null){
+//            visu3D1.destroy();
+//            visu3D1 = null;
+//        }
+//        if(visu3D2!=null){
+//            visu3D2.destroy();
+//            visu3D2 = null;
+//        }
+//        if(visu3D3!=null){
+//            visu3D3.destroy();
+//            visu3D3 = null;
+//        }
+//        if(visu3D4!=null){
+//            visu3D4.destroy();
+//            visu3D4 = null;
+//        }
+//        if(visu3D5!=null){
+//            visu3D5.destroy();
+//            visu3D5 = null;
+//        }
+//        if(visu3D6!=null){
+//            visu3D6.destroy();
+//            visu3D6 = null;
+//        }
+//        if(visu3D7!=null){
+//            visu3D7.destroy();
+//            visu3D7 = null;
+//        }
+//        if(visu3D8!=null){
+//            visu3D8.destroy();
+//            visu3D8 = null;
+//        }
+//
+//    }
+    /**
+     * Methode pour l'initilisation des scï¿½nes 3D
+     * @throws Exception
+     */
     private void initialisationNuage3D() throws Exception{
-
-        visu3D1 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D2 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D3 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D4 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D5 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D6 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D7 = new Visualisation_Nuage_3D(0, 0, 0);
-        visu3D8 = new Visualisation_Nuage_3D(0, 0, 0);
-        
+        for (int i = 0; i<numVisu; i++)
+            listVisu3D.set(i,new Visualisation_Nuage_3D(0, 0, 0));
     }
+//    private void initialisationNuage3D() throws Exception{
+//
+//        visu3D1 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D2 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D3 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D4 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D5 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D6 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D7 = new Visualisation_Nuage_3D(0, 0, 0);
+//        visu3D8 = new Visualisation_Nuage_3D(0, 0, 0);
+//
+//    }
 
     private void initialisation() throws Exception{
         individuSelect = new boolean[PopulationSize];
@@ -1252,99 +1279,152 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
         return MatchingListResult;
 
     }
-
+//    private void AfficherIndividus(final String XMLFilepath) throws Exception {
+//
+//        initialisationNuage3DEmpty();
+//        initialisationNuage3D();
+//        //initialisationVisu();
+//        int pro = 0;
+//        for(int j = 0; j< numMethode; j++){
+//            pro++;
+//            final int profil = pro;
+//            System.out.println("Profil: "+ profil);
+//            if (pro<numMethode){
+//                listVisu3D.get(j).ConfigurationNuage3D(XMLFilepath, "profil"+pro);
+//                listVisu3D.get(j).createScene();
+//                //jScrollPaneVisu3D1.setViewportView(listVisu3D.get(j).getCustomCanvas3D());
+//                listJScrollPaneVisu3D.get(j).setViewportView(listVisu3D.get(j).getCustomCanvas3D());
+//                listVisu3D.get(j).addPointOfViewListener(listVisu3D.get(j).getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//                    @Override
+//                    public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//                        updatePreview3D(filePathName,profil);//afficher le profil i : qui est passï¿½ en paramï¿½tre
+//                    }
+//                });
+//                listVisu3D.get(j).getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//            }
+//        }
+//        //OverviewPictureContainer.setViewportView(parallelDisplay);
+//    }
+     private void initialisationVisu(){        
+        listJScrollPaneVisu3D.add(scrollpane1);
+        listJScrollPaneVisu3D.add(scrollpane2);
+        listJScrollPaneVisu3D.add(scrollpane3);
+        listJScrollPaneVisu3D.add(scrollpane4);
+        listJScrollPaneVisu3D.add(scrollpane5);
+        listJScrollPaneVisu3D.add(scrollpane6);
+        listJScrollPaneVisu3D.add(scrollpane7);
+        listJScrollPaneVisu3D.add(scrollpane8);
+        
+    }
     private void AfficherIndividus(final String XMLFilepath) throws Exception {
 
         initialisationNuage3DEmpty();
         initialisationNuage3D();
-        visu3D1.ConfigurationNuage3D(XMLFilepath, "profil"+0);
-        visu3D1.createScene();
-        scrollpane1.setViewportView(visu3D1.getCustomCanvas3D());
-        
-        visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,0);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D1.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+        initialisationVisu();
+        int i = 0;
+        for(int j = 0; j< numVisu; j++){
+            i++;
+            final int profil = i;
+            listVisu3D.get(j).ConfigurationNuage3D(XMLFilepath, "profil"+i);
+            listVisu3D.get(j).createScene();
+            listJScrollPaneVisu3D.get(j).setViewportView(listVisu3D.get(j).getCustomCanvas3D());
 
-        visu3D2.ConfigurationNuage3D(XMLFilepath, "profil"+1);
-        visu3D2.createScene();
-        scrollpane2.setViewportView(visu3D2.getCustomCanvas3D());
-        visu3D2.addPointOfViewListener(visu3D2.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,1);//afficher le profil i : qui est passé en paramètre
+            listVisu3D.get(j).addPointOfViewListener(listVisu3D.get(j).getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+                @Override
+                public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+                updatePreview(XMLFilepath,profil);//afficher le profil i : qui est passé en paramètre
+                }
+            });
+            listVisu3D.get(j).getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
         }
-        });
-        visu3D2.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D3.ConfigurationNuage3D(XMLFilepath, "profil"+2);
-        visu3D3.createScene();
-        scrollpane3.setViewportView(visu3D3.getCustomCanvas3D());
-        visu3D3.addPointOfViewListener(visu3D3.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,2);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D3.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D4.ConfigurationNuage3D(XMLFilepath, "profil"+3);
-        visu3D4.createScene();
-        scrollpane4.setViewportView(visu3D4.getCustomCanvas3D());
-        visu3D4.addPointOfViewListener(visu3D4.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,3);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D4.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D5.ConfigurationNuage3D(XMLFilepath, "profil"+4);
-        visu3D5.createScene();
-        scrollpane5.setViewportView(visu3D5.getCustomCanvas3D());
-        visu3D5.addPointOfViewListener(visu3D5.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,4);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D5.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D6.ConfigurationNuage3D(XMLFilepath, "profil"+5);
-        visu3D6.createScene();
-        scrollpane6.setViewportView(visu3D6.getCustomCanvas3D());
-        visu3D6.addPointOfViewListener(visu3D6.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,5);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D6.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D7.ConfigurationNuage3D(XMLFilepath, "profil"+6);
-        visu3D7.createScene();
-        scrollpane7.setViewportView(visu3D7.getCustomCanvas3D());
-        visu3D7.addPointOfViewListener(visu3D7.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,6);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D7.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
-
-        visu3D8.ConfigurationNuage3D(XMLFilepath, "profil"+7);
-        visu3D8.createScene();
-        scrollpane8.setViewportView(visu3D8.getCustomCanvas3D());
-        visu3D8.addPointOfViewListener(visu3D8.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
-        @Override
-        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
-        updatePreview(XMLFilepath,7);//afficher le profil i : qui est passé en paramètre
-        }
-        });
-        visu3D8.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//        visu3D1.ConfigurationNuage3D(XMLFilepath, "profil"+0);
+//        visu3D1.createScene();
+//        scrollpane1.setViewportView(visu3D1.getCustomCanvas3D());
+//
+//        visu3D1.addPointOfViewListener(visu3D1.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,0);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D1.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D2.ConfigurationNuage3D(XMLFilepath, "profil"+1);
+//        visu3D2.createScene();
+//        scrollpane2.setViewportView(visu3D2.getCustomCanvas3D());
+//        visu3D2.addPointOfViewListener(visu3D2.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,1);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D2.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D3.ConfigurationNuage3D(XMLFilepath, "profil"+2);
+//        visu3D3.createScene();
+//        scrollpane3.setViewportView(visu3D3.getCustomCanvas3D());
+//        visu3D3.addPointOfViewListener(visu3D3.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,2);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D3.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D4.ConfigurationNuage3D(XMLFilepath, "profil"+3);
+//        visu3D4.createScene();
+//        scrollpane4.setViewportView(visu3D4.getCustomCanvas3D());
+//        visu3D4.addPointOfViewListener(visu3D4.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,3);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D4.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D5.ConfigurationNuage3D(XMLFilepath, "profil"+4);
+//        visu3D5.createScene();
+//        scrollpane5.setViewportView(visu3D5.getCustomCanvas3D());
+//        visu3D5.addPointOfViewListener(visu3D5.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,4);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D5.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D6.ConfigurationNuage3D(XMLFilepath, "profil"+5);
+//        visu3D6.createScene();
+//        scrollpane6.setViewportView(visu3D6.getCustomCanvas3D());
+//        visu3D6.addPointOfViewListener(visu3D6.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,5);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D6.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D7.ConfigurationNuage3D(XMLFilepath, "profil"+6);
+//        visu3D7.createScene();
+//        scrollpane7.setViewportView(visu3D7.getCustomCanvas3D());
+//        visu3D7.addPointOfViewListener(visu3D7.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,6);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D7.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
+//
+//        visu3D8.ConfigurationNuage3D(XMLFilepath, "profil"+7);
+//        visu3D8.createScene();
+//        scrollpane8.setViewportView(visu3D8.getCustomCanvas3D());
+//        visu3D8.addPointOfViewListener(visu3D8.getMainPointOfView().getName(), new PointOfViewMouseAdapter() {
+//        @Override
+//        public void onMouseLeftClick(MouseEvent m, PointOfView p, Object3D o){
+//        updatePreview(XMLFilepath,7);//afficher le profil i : qui est passé en paramètre
+//        }
+//        });
+//        visu3D8.getMainPointOfView().getControlManager().setCurrentMetaControl(new NoneVRMMetaControlInfo());
         
     }
 
@@ -1772,17 +1852,20 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
 
     static void UpdateElement_InitialPopulation(int Individual_Size, List<List<Appariement>> appariement, int indice, List<Normalisation> listNormalisation) {
 
-          
+          // Problème avec NameProfil pour les coordonnées Parallèles
           for(int j=0; j<Individual_Size; j++){
+
             String MaxValue;
             String MinValue;
-            Element VisualAtt = NameProfil.getChild(appariement.get(indice).get(j).getName_v_data());
-            VisualAtt.setText(appariement.get(indice).get(j).getName_data());
+            Element VisualAtt = NameProfil.getChild(appariement.get(indice-1).get(j).getName_v_data());
+            VisualAtt.setText(appariement.get(indice-1).get(j).getName_data());
+
+
             if(VisualAtt.getName().equals("xAxis")){
                Element xMinValeur = NameProfil.getChild("xMinVal");
                Element xMaxValeur = NameProfil.getChild("xMaxVal");
-               MinValue = getMinNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
-               MaxValue = getMaxNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
+               MinValue = getMinNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
+               MaxValue = getMaxNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
 //               System.out.println("XMin : "+MinValue);
 //               System.out.println("XMax : "+MaxValue);
                xMinValeur.setText(MinValue);
@@ -1791,8 +1874,8 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
             if(VisualAtt.getName().equals("yAxis")){
                Element yMinValeur = NameProfil.getChild("yMinVal");
                Element yMaxValeur = NameProfil.getChild("yMaxVal");
-               MinValue = getMinNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
-               MaxValue = getMaxNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
+               MinValue = getMinNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
+               MaxValue = getMaxNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
 //               System.out.println("YMin : "+MinValue);
 //               System.out.println("YMax : "+MaxValue);
                yMinValeur.setText(MinValue);
@@ -1801,8 +1884,8 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
             if(VisualAtt.getName().equals("zAxis")){
                Element zMinValeur = NameProfil.getChild("zMinVal");
                Element zMaxValeur = NameProfil.getChild("zMaxVal");
-               MinValue = getMinNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
-               MaxValue = getMaxNormalisationValue(appariement.get(indice).get(j).getName_data(), listNormalisation);
+               MinValue = getMinNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
+               MaxValue = getMaxNormalisationValue(appariement.get(indice-1).get(j).getName_data(), listNormalisation);
 //               System.out.println("ZMin : "+MinValue);
 //               System.out.println("ZMax : "+MaxValue);
                zMinValeur.setText(MinValue);
@@ -1911,6 +1994,11 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
     //On enregsitre notre nouvelle arborescence dans le fichier d'origine dans un format classique.
     public final void enregistreFichier(String fichier) throws Exception
    {
+       if (document == null){
+            System.out.println("Erreur: document Null");             
+            SAXBuilder sxb = new SAXBuilder();
+            document = sxb.build(fichier);        
+       }
          XMLOutputter sortie = new XMLOutputter(Format.getPrettyFormat());
          sortie.output(document, new FileOutputStream(fichier));
    }
@@ -2302,23 +2390,30 @@ CreateNewPopulationButton.addActionListener(new java.awt.event.ActionListener() 
     // End of variables declaration//GEN-END:variables
     private Visualisation_Nuage_3D visu3D1, visu3D2, visu3D3, visu3D4, visu3D5, visu3D6, visu3D7, visu3D8, visu3D9;
     final String XMLfilepathName;
-    private String MethodeName, SprofilDefaut = "profil0";
+    private String MethodeName, SprofilDefaut = "profil1";
+ //SprofilDefaut = "profil0";
     private List<Visualisation> ListInitialDataAttribute, listdeVisual, PopInitiale, ListVisualAttribute, ListDataAttribute, v_attribte, d_attribte, Initial_v_attribte, Initial_d_attribte;
     private List<Normalisation> list_Numerique_DataAttribute_Normalisation;
     private List<Integer> vecTirageAleatoire;
     private boolean[] individuSelect;
     private boolean state = false;
+;
     private List<Appariement> MatchingResultInitiale, NewMatchingResult, NewMatchingIndividualResult;
     private List<MEC> mec, mec1;
+;
     private List<List<Appariement>> InitialPopulation, newPopulation, CrossOverPopulation;
     private List<Appariement> individuMEC;
+ //individuMEC;
     private int indiceSelectedProfil, PopulationSize = 8, NbreIteration, MaxIteration=10, Individual_Size, nbIndivSelect;
+ //nbIndivSelect;
     private double Pfilling = 0.1, Pmute, PminMute = 0.1, ALPHA = 20;
     private static Document document;
+ //document;
     private static Element racine, visualizations, NameVisu, NameProfil, typeVisu;
     private int numberProfil;
     private OffScreenCanvas3D offScreenCanvas = null;
     boolean imageReady = false;
+ //false;
     private List<List<Visualisation>> DataAttributePopulation, CrossOverPopulationDataAttribute, Buffer, NewDataAttributePopulation;
     private boolean isVerified = false;
     /* Initialiser les deux fils */

@@ -293,7 +293,9 @@ public class Matching {
     public List<Visualisation> getListe(String xml) throws Exception{
         List<Visualisation> xmlListe = new ArrayList<Visualisation>();
         SAXBuilder sxb = new SAXBuilder();
-        document1 = sxb.build(new File(xml));
+        //document1 =
+        File xmlFile = new File(xml);
+        document1 = sxb.build(xmlFile);
         racine = document1.getRootElement();
         List listAttributes = racine.getChild("structure").getChildren("attribute");
         Iterator i = listAttributes.iterator();
